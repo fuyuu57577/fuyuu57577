@@ -1,6 +1,7 @@
 ## Hi there 👋
 
-[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=fuyuu57577)](https://github.com/fuyuu57577/github-readme-stats)
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=fuyuu57577&hide=jupyter%20notebook)](https://github.com/fuyuu57577/github-readme-stats)
+
 <!--
 **fuyuu57577/fuyuu57577** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
