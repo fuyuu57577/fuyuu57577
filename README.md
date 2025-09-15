@@ -1,6 +1,6 @@
 ## Hi there 👋
 
-[![Gist Card](https://github-readme-stats.vercel.app/api/gist?id=bbfce31e0217a3689c8d961a356cb10d)](https://gist.github.com/Yizack/bbfce31e0217a3689c8d961a356cb10d/)
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=fuyuu57577)](https://github.com/fuyuu57577/github-readme-stats)
 <!--
 **fuyuu57577/fuyuu57577** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
