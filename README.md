@@ -1,8 +1,10 @@
 <div align="center">
 
 <img src="./assets/fastfetch.svg" alt="fuyuu57577 fastfetch-style profile card" width="880" />
-
+<a href="https://fuyuu575.com"><img src="./assets/fastfetch-portfolio-headerless.svg" alt="fuyuu57577 portfolio site" width="880" /></a>
 <a href="https://x.com/fuyuu575"><img src="./assets/fastfetch-x-headerless.svg" alt="fuyuu575 on X" width="880" /></a>
+
+<img src="./assets/fastfetch-coffee-headerless.svg" alt="fuyuu57577 runs on coffee" width="880" />
 
 </div>
 

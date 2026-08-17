@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 200" width="880" height="200">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --border: #d0d7de;
+      --text: #24292f;
+      --muted: #57606a;
+      --prompt-user: #1a7f37;
+      --coffee: #8b5a2b;
+      --steam: #b98a5e;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --border: #30363d;
+        --text: #c9d1d9;
+        --muted: #8b949e;
+        --prompt-user: #3fb950;
+        --coffee: #c68a52;
+        --steam: #d9b48f;
+      }
+    }
+    .term {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      width: 880px;
+      height: 200px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+      color: var(--text);
+    }
+    .promptbar { flex: 0 0 auto; box-sizing: border-box; padding: 16px 32px 0 32px; }
+    .prompt { font-size: 14px; white-space: nowrap; }
+    .p-user { color: var(--prompt-user); font-weight: 700; }
+    .p-sym { color: var(--muted); margin: 0 2px; }
+    .p-cmd { color: var(--text); font-weight: 700; }
+    .body { flex: 1 1 auto; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 6px 40px 18px 40px; }
+    .caption { font-size: 14px; color: var(--muted); font-style: italic; }
+    .aa {
+      flex: 0 0 auto;
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.28;
+      color: var(--coffee);
+      white-space: pre;
+    }
+    .aa .steam { color: var(--steam); }
+    .aa .mirror { display: inline-block; transform: scaleX(-1); }
+  </style>
+  <foreignObject width="100%" height="100%">
+    <xhtml:div class="term">
+      <xhtml:div class="promptbar">
+        <xhtml:div class="prompt"><xhtml:span class="p-user">fuyuu57577@github</xhtml:span> <xhtml:span class="p-sym">~</xhtml:span> <xhtml:span class="p-sym">$</xhtml:span> <xhtml:span class="p-cmd">coffee --status</xhtml:span></xhtml:div>
+      </xhtml:div>
+      <xhtml:div class="body">
+        <xhtml:pre class="aa">     <xhtml:span class="steam">(</xhtml:span>
+      <xhtml:span class="steam">)     (</xhtml:span>
+       <xhtml:span class="steam">)   )</xhtml:span>
+      _______
+     |       |<xhtml:span class="mirror">/</xhtml:span>
+     |       |/
+      `-----'</xhtml:pre>
+        <xhtml:div class="caption">Coffee is my go-to work companion.</xhtml:div>
+      </xhtml:div>
+    </xhtml:div>
+  </foreignObject>
+</svg>
