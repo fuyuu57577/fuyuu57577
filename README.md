@@ -1,6 +1,10 @@
-## Hi there 👋
+<div align="center">
 
+<img src="./assets/fastfetch.svg" alt="fuyuu57577 fastfetch-style profile card" width="880" />
 
+<a href="https://x.com/fuyuu575"><img src="./assets/fastfetch-x-headerless.svg" alt="fuyuu575 on X" width="880" /></a>
+
+</div>
 
 <!--
 **fuyuu57577/fuyuu57577** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
