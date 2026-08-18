@@ -89,18 +89,16 @@
           </xhtml:div>
         </xhtml:div>
         <xhtml:div class="divider"></xhtml:div>
-        <xhtml:div class="coffee-row" style="--drink: #2f6fb0; --drink-accent: #7ec8f5;">
+        <xhtml:div class="coffee-row" style="--drink: #8b5a2b; --drink-accent: #b98a5e;">
           <xhtml:p class="coffee-title">A drink to match my mood</xhtml:p>
-          <xhtml:pre class="aa">      __
-     |  |
-    /    <xhtml:span class="mirror">/</xhtml:span>
-    <xhtml:span class="mirror">/</xhtml:span> <xhtml:span class="accent">◯</xhtml:span> /
-    /~~~~<xhtml:span class="mirror">/</xhtml:span>
-  　|   <xhtml:span class="accent">o</xhtml:span> |
-  　| <xhtml:span class="accent">゜。</xhtml:span>|
-  　|<xhtml:span class="accent">。  .</xhtml:span>|
-  　`-___-'</xhtml:pre>
-                    <xhtml:div class="caption">Perfect for a hot day.</xhtml:div>
+          <xhtml:pre class="aa">     <xhtml:span class="accent">(</xhtml:span>
+      <xhtml:span class="accent">)     (</xhtml:span>
+       <xhtml:span class="accent">)   )</xhtml:span>
+      _______
+     |       |<xhtml:span class="mirror">/</xhtml:span>
+     |       |/
+      `-----'</xhtml:pre>
+                    <xhtml:div class="caption">Coffee is my go-to work companion.</xhtml:div>
         </xhtml:div>
       </xhtml:div>
     </xhtml:div>
