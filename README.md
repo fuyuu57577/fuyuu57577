@@ -1,11 +1,11 @@
-<!-- assets version: 1 (bump this when card SVGs change, so README.md content changes and GitHub re-renders the images) -->
+<!-- assets version: 2 (bump this when card SVGs change, so README.md content changes and GitHub re-renders the images) -->
 
 <div align="center">
 
-<a href="#"><img src="./assets/aboutme.svg" alt="fuyuu57577 aboutme profile card" width="880" /></a>
+<a id="card-aboutme" href="#card-aboutme"><img src="./assets/aboutme.svg" alt="fuyuu57577 aboutme profile card" width="880" /></a>
 <a href="https://fuyuu575.com"><img src="./assets/portfolio-headerless.svg" alt="fuyuu57577 portfolio site" width="880" /></a>
 <a href="https://x.com/fuyuu575"><img src="./assets/x-headerless.svg" alt="fuyuu575 on X" width="880" /></a>
-<a href="#"><img src="./assets/now-headerless.svg" alt="fuyuu57577 interests, current projects, and coffee" width="880" /></a>
+<a id="card-now" href="#card-now"><img src="./assets/now-headerless.svg" alt="fuyuu57577 interests, current projects, and coffee" width="880" /></a>
 
 </div>
 
