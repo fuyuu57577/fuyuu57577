@@ -6,7 +6,12 @@
       :root { --drink: {{drinkColorDark}}; --drink-accent: {{drinkAccentDark}}; }
     }
     .term { width: {{width}}px; height: {{height}}px; }
-    .promptbar { padding: 14px 40px 0 40px; }
+    /* shared.css centers .titletext via margin:auto + a -18px shift, which
+       assumes a wide fixed-width card with slack to center into. This card
+       is shrink-wrapped to its content instead, so there's no slack — the
+       shift alone would push the text straight into the dots. Just flow it
+       naturally after them. */
+    .titletext { margin: 0; transform: none; }
     .body {
       flex: 1 1 auto;
       box-sizing: border-box;

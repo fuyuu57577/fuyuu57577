@@ -2,16 +2,18 @@
 // Single entrypoint: renders every panel in README.yml into
 // Config.OutputImagesDir and assembles Config.OutputMDFile.
 //
-// Usage: node tools/build-readme.mjs
+// Usage: node tools/build-readme.mjs [--preview]
 
 import { readFileSync, writeFileSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { createHash } from "node:crypto";
+import { chromium } from "playwright";
 import { parseYaml, idAndRest } from "./lib/yaml.mjs";
 import { render, escapeXhtml } from "./lib/template.mjs";
 import { parseDrinkFile, renderDrink } from "./lib/drink.mjs";
-import { renderTitlebar, renderPromptbar, estimateTextWidth } from "./lib/panel.mjs";
+import { renderTitlebar, renderPromptbar } from "./lib/panel.mjs";
+import { measureTermSize, PROBE_SIZE } from "./lib/measure.mjs";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const rp = (...p) => path.join(root, ...p);
@@ -34,47 +36,25 @@ Here are some ideas to get you started:
 
 // ---------- panel renderers: each returns { svg } ----------
 
-// aboutme's row count is fixed by schema (always 9), so 500px is proven
-// enough — but a long value can still wrap onto a 2nd line and clip. Only
-// grow past the proven baseline when a row's estimated width says it will.
-function heightForAboutme(rowTexts) {
-  const BASE = 500;
-  const VALUE_WIDTH_PX = 460;
-  const ROW_LINE_HEIGHT = 14 * 1.85;
-  const WIDE_CHAR_WIDTH = 0.85; // biased wide so CJK content isn't under-estimated
-  let extra = 0;
-  for (const text of rowTexts) {
-    const estWidth = estimateTextWidth(text, 14, WIDE_CHAR_WIDTH);
-    if (estWidth > VALUE_WIDTH_PX) {
-      extra += (Math.ceil(estWidth / VALUE_WIDTH_PX) - 1) * ROW_LINE_HEIGHT;
-    }
-  }
-  return Math.ceil(BASE + extra);
+// aboutme/now have a width fixed at 880px by design (aligns with the other
+// panels in the README grid) but a height that depends on content (a long
+// row can wrap, a drink's AA can run long) — so only height is measured.
+async function renderWithMeasuredHeight(browser, template, vars) {
+  const probeSvg = render(template, { ...vars, height: String(PROBE_SIZE) });
+  const { height } = await measureTermSize(browser, probeSvg, { freeWidth: false });
+  return render(template, { ...vars, height: String(height) });
 }
 
-function renderAboutmePanel(panel, tplDir, sharedStyles) {
+async function renderAboutmePanel(browser, panel, tplDir, sharedStyles) {
   const template = readFileSync(path.join(tplDir, "aboutme.svg.tpl"), "utf8");
   const avatarB64 = readFileSync(rp(panel.profileImage)).toString("base64");
 
   const row = (label, valueHtml) =>
     `          <xhtml:div class="row"><xhtml:div class="label">${escapeXhtml(label)}</xhtml:div><xhtml:div class="value">${valueHtml}</xhtml:div></xhtml:div>`;
 
-  const certsText = panel.certs.map((c) => `${c.name} ${c.date}`).join(", ");
   const certsHtml = panel.certs
     .map((c) => `${escapeXhtml(c.name)} <xhtml:b>${escapeXhtml(c.date)}</xhtml:b>`)
     .join(", ");
-
-  const rowValues = [
-    panel.nickname,
-    panel.univ,
-    panel.mission,
-    panel.languages.join(", "),
-    panel.frameworks.join(", "),
-    panel.tools.join(", "),
-    certsText,
-    panel.socials.join(", "),
-    panel.contact,
-  ];
 
   const rows = [
     row("Nickname", escapeXhtml(panel.nickname)),
@@ -88,12 +68,10 @@ function renderAboutmePanel(panel, tplDir, sharedStyles) {
     row("Contact", escapeXhtml(panel.contact)),
   ].join("\n");
 
-  const height = heightForAboutme(rowValues);
-  const svg = render(template, {
+  const svg = await renderWithMeasuredHeight(browser, template, {
     sharedStyles,
     titlebar: renderTitlebar("aboutme"),
     promptbar: renderPromptbar("aboutme"),
-    height: String(height),
     avatar: `data:image/jpeg;base64,${avatarB64}`,
     rows,
   });
@@ -113,22 +91,7 @@ function renderBadgePanel(panel, tplDir, sharedStyles) {
   return { svg };
 }
 
-// Content-driven height for now.svg.tpl (width stays fixed at 880 to align
-// with the other panels). Drinks vary a lot in line count, so a fixed
-// height clips longer art/captions — compute it from what's actually there.
-function heightForNow(maxColumnItems, artLineCount) {
-  const PROMPTBAR = 14 /* padding-top */ + 15 /* prompt line */;
-  const BODY_PADDING = 12 + 22;
-  const BODY_GAPS = 20 * 2; // columns<->divider, divider<->coffee-row
-  const COLUMNS = 14 * 1.2 + 8 /* col-title + margin */ + maxColumnItems * (14 * 1.9);
-  const DIVIDER = 1;
-  const COFFEE_ROW =
-    14 * 1.2 /* title */ + 10 /* gap */ + artLineCount * (13 * 1.28) /* aa */ + 10 /* gap */ + 14 * 1.2; /* caption */
-  const BUFFER = 16; // default line-height approximations vary slightly by font
-  return Math.ceil(PROMPTBAR + BODY_PADDING + BODY_GAPS + COLUMNS + DIVIDER + COFFEE_ROW + BUFFER);
-}
-
-function renderNowPanel(panel, tplDir, drinksDir, sharedStyles) {
+async function renderNowPanel(browser, panel, tplDir, drinksDir, sharedStyles) {
   const template = readFileSync(path.join(tplDir, "now.svg.tpl"), "utf8");
 
   const column = (title, items) => {
@@ -149,13 +112,9 @@ function renderNowPanel(panel, tplDir, drinksDir, sharedStyles) {
   const drink = parseDrinkFile(readFileSync(path.join(drinksDir, `${panel.drink}.txt`), "utf8"));
   const { aa, drinkColorDark, drinkAccentDark, drinkColorLight, drinkAccentLight } = renderDrink(drink);
 
-  const maxColumnItems = Math.max(panel.interests.length, panel.building.length);
-  const height = heightForNow(maxColumnItems, drink.artLines.length);
-
-  const svg = render(template, {
+  const svg = await renderWithMeasuredHeight(browser, template, {
     sharedStyles,
     promptbar: renderPromptbar("now"),
-    height: String(height),
     columns,
     aa,
     drinkColorDark,
@@ -168,7 +127,7 @@ function renderNowPanel(panel, tplDir, drinksDir, sharedStyles) {
 
 // ---------- main ----------
 
-function main() {
+async function main() {
   const yamlText = readFileSync(rp("README.yml"), "utf8");
   const doc = parseYaml(yamlText);
   const cfg = doc.Config;
@@ -190,45 +149,50 @@ function main() {
     pendingImages = [];
   };
 
-  for (const item of doc.Panels) {
-    const { id, panel } = idAndRest(item);
+  const browser = await chromium.launch();
+  try {
+    for (const item of doc.Panels) {
+      const { id, panel } = idAndRest(item);
 
-    if (panel.type === "aboutme" || panel.type === "badge" || panel.type === "now") {
-      const { svg } =
-        panel.type === "aboutme"
-          ? renderAboutmePanel(panel, tplDir, sharedStyles)
-          : panel.type === "badge"
-            ? renderBadgePanel(panel, tplDir, sharedStyles)
-            : renderNowPanel(panel, tplDir, drinksDir, sharedStyles);
+      if (panel.type === "aboutme" || panel.type === "badge" || panel.type === "now") {
+        const { svg } =
+          panel.type === "aboutme"
+            ? await renderAboutmePanel(browser, panel, tplDir, sharedStyles)
+            : panel.type === "badge"
+              ? renderBadgePanel(panel, tplDir, sharedStyles)
+              : await renderNowPanel(browser, panel, tplDir, drinksDir, sharedStyles);
 
-      // Version the filename itself (not just a comment) so the <img> src
-      // actually changes and GitHub's camo proxy can't serve a stale cache.
-      const fileName = `${id}-${doc.version}.svg`;
-      for (const stale of readdirSync(imagesDir)) {
-        if (stale.startsWith(`${id}-`) && stale.endsWith(".svg") && stale !== fileName) {
-          unlinkSync(path.join(imagesDir, stale));
+        // Version the filename itself (not just a comment) so the <img> src
+        // actually changes and GitHub's camo proxy can't serve a stale cache.
+        const fileName = `${id}-${doc.version}.svg`;
+        for (const stale of readdirSync(imagesDir)) {
+          if (stale.startsWith(`${id}-`) && stale.endsWith(".svg") && stale !== fileName) {
+            unlinkSync(path.join(imagesDir, stale));
+          }
         }
-      }
-      writeFileSync(path.join(imagesDir, fileName), svg, "utf8");
-      const relSrc = "./" + path.posix.join(cfg.OutputImagesDir.replace(/^\.\//, ""), fileName);
-      const alt = `fuyuu57577 ${id} panel`;
+        writeFileSync(path.join(imagesDir, fileName), svg, "utf8");
+        const relSrc = "./" + path.posix.join(cfg.OutputImagesDir.replace(/^\.\//, ""), fileName);
+        const alt = `fuyuu57577 ${id} panel`;
 
-      const imgTag = `<img src="${relSrc}" alt="${escapeXhtml(alt)}" width="880" />`;
-      const anchored =
-        panel.type === "badge"
-          ? `<a href="${panel.href}">${imgTag}</a>`
-          : `<a id="card-${id}" href="#card-${id}">${imgTag}</a>`;
-      pendingImages.push(anchored);
-      console.log(`compiled panel "${id}" (${panel.type}) -> ${relSrc}`);
-    } else if (panel.type === "md") {
-      flushImages();
-      bodyParts.push(panel.value);
-    } else if (panel.type === "mdfile") {
-      flushImages();
-      bodyParts.push(readFileSync(rp(panel.path), "utf8").trimEnd());
-    } else {
-      throw new Error(`panel "${id}" has unknown type "${panel.type}"`);
+        const imgTag = `<img src="${relSrc}" alt="${escapeXhtml(alt)}" width="880" />`;
+        const anchored =
+          panel.type === "badge"
+            ? `<a href="${panel.href}">${imgTag}</a>`
+            : `<a id="card-${id}" href="#card-${id}">${imgTag}</a>`;
+        pendingImages.push(anchored);
+        console.log(`compiled panel "${id}" (${panel.type}) -> ${relSrc}`);
+      } else if (panel.type === "md") {
+        flushImages();
+        bodyParts.push(panel.value);
+      } else if (panel.type === "mdfile") {
+        flushImages();
+        bodyParts.push(readFileSync(rp(panel.path), "utf8").trimEnd());
+      } else {
+        throw new Error(`panel "${id}" has unknown type "${panel.type}"`);
+      }
     }
+  } finally {
+    await browser.close();
   }
   flushImages();
 

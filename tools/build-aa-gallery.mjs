@@ -11,30 +11,12 @@ import path from "node:path";
 import { chromium } from "playwright";
 import { parseYaml } from "./lib/yaml.mjs";
 import { render } from "./lib/template.mjs";
-import { parseDrinkFile, renderDrink, visibleLength } from "./lib/drink.mjs";
+import { parseDrinkFile, renderDrink } from "./lib/drink.mjs";
 import { renderTitlebar, renderPromptbar } from "./lib/panel.mjs";
+import { measureTermSize, PROBE_SIZE } from "./lib/measure.mjs";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const rp = (...p) => path.join(root, ...p);
-
-const CHAR_WIDTH_PX = 8.2; // ~0.63 * 13px monospace
-const LINE_HEIGHT_PX = 13 * 1.28;
-const PADDING_X_PX = 40;
-const TITLEBAR_PX = 34;
-const PROMPTBAR_PX = 14 + 15; // padding-top + prompt line
-
-const CAPTION_CHAR_WIDTH_PX = 7.6; // ~italic 14px
-
-function sizeFor(artLines, caption) {
-  const artLen = Math.max(1, ...artLines.map(visibleLength));
-  const artWidth = Math.ceil(artLen * CHAR_WIDTH_PX);
-  const captionWidth = Math.ceil(caption.length * CAPTION_CHAR_WIDTH_PX);
-  const width = Math.max(320, Math.max(artWidth, captionWidth) + PADDING_X_PX * 2);
-  const artHeight = artLines.length * LINE_HEIGHT_PX;
-  const bodyHeight = 10 /* top padding */ + artHeight + 10 /* gap */ + 20 /* caption */ + 24 /* bottom padding */;
-  const height = Math.ceil(TITLEBAR_PX + PROMPTBAR_PX + bodyHeight);
-  return { width, height };
-}
 
 async function screenshot(browser, svgAbsPath, width, height, scheme, outPath) {
   const bg = scheme === "dark" ? "#0d1117" : "#ffffff";
@@ -72,19 +54,24 @@ async function main() {
       const id = file.replace(/\.txt$/, "");
       const drink = parseDrinkFile(readFileSync(path.join(drinksDir, file), "utf8"));
       const { aa, drinkColorDark, drinkAccentDark, drinkColorLight, drinkAccentLight } = renderDrink(drink);
-      const { width, height } = sizeFor(drink.artLines, drink.caption);
-      const svg = render(template, {
+      const vars = {
         sharedStyles,
         titlebar: renderTitlebar(id),
         promptbar: renderPromptbar(id),
-        width: String(width),
-        height: String(height),
         aa,
         drinkColorDark,
         drinkAccentDark,
         drinkColorLight,
         drinkAccentLight,
-      });
+      };
+
+      // Pass 1: render at a generous probe size and measure the card's real
+      // shrink-to-fit box (no character-width guessing).
+      const probeSvg = render(template, { ...vars, width: String(PROBE_SIZE), height: String(PROBE_SIZE) });
+      const { width, height } = await measureTermSize(browser, probeSvg);
+
+      // Pass 2: render for real at that exact size.
+      const svg = render(template, { ...vars, width: String(width), height: String(height) });
       const svgPath = path.join(tmpDir, `${id}.svg`);
       writeFileSync(svgPath, svg, "utf8");
 

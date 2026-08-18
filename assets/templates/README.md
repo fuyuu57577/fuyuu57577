@@ -34,7 +34,7 @@ Placeholders every template gets from the shared plumbing:
 | `{{sharedStyles}}` | `shared.css`, read once per build              | put first in `<style>` so panel rules can override it |
 | `{{titlebar}}`     | `tools/lib/panel.mjs` → `renderTitlebar(title)` | only for cards that keep the macOS-dots header (currently just `aboutme.svg.tpl`, `aa-card.svg.tpl`) |
 | `{{promptbar}}`    | `tools/lib/panel.mjs` → `renderPromptbar(command)` | every card has one; it's always the first child of `.term` when there's no titlebar |
-| `{{width}}` / `{{height}}` | computed per panel in the build script | placeholder whenever content (line/item count, text length) can vary; hardcode only when the content shape is structurally fixed |
+| `{{width}}` / `{{height}}` | real browser measurement via `tools/lib/measure.mjs` (see `tools/README.md`) | placeholder whenever content (line/item count, text length) can vary; hardcode only when the content shape is structurally fixed |
 
 Panel-specific placeholders (`{{avatar}}`, `{{rows}}`, `{{icon}}`,
 `{{handle}}`, `{{columns}}`, `{{aa}}`, `{{drinkStyle}}`, ...) are documented
@@ -58,7 +58,9 @@ template — copy the placeholder pattern above instead.
 3. Add a `render<Name>Panel()` function to `tools/build-readme.mjs` (or a
    new build script, if it's not a `README.yml` panel type) that reads the
    template, builds the panel-specific placeholder values, and calls
-   `render()`.
+   `render()`. If width or height can vary with content, measure it with
+   `tools/lib/measure.mjs`'s `measureTermSize()` — don't estimate it from
+   character counts, that's a magic-number trap (see `tools/README.md`).
 4. If any ASCII art needs a backslash-look character, use the `.mirror`
    trick documented in `panel-template.svg.tpl` — never a literal `\`
    (renders as ¥ on this Windows/JP-locale Chromium setup).

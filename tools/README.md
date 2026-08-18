@@ -27,9 +27,9 @@ Panel `type` dispatch:
 
 | type | template | notes |
 |------|----------|-------|
-| `aboutme` | `aboutme.svg.tpl` | avatar (base64-encoded from `panel.profileImage` at build time) + 9 fixed info rows. Height is normally the proven 500px baseline, but grows if a row's estimated text width says it will wrap. |
+| `aboutme` | `aboutme.svg.tpl` | avatar (base64-encoded from `panel.profileImage` at build time) + 9 info rows. Width is fixed at 880px (aligns with the grid); height is real browser measurement (`lib/measure.mjs`), so a wrapped row never clips. |
 | `badge` | `badge.svg.tpl` | icon (from `assets/templates/icons/<panel.icon>.svg`) + handle/url + external-link corner. Fixed 880×130 — row count never varies. |
-| `now` | `now.svg.tpl` | Interests/Building columns + the active drink's AA (from `assets/AA/<panel.drink>.txt`, via `lib/drink.mjs`). Height is computed from column item counts and AA line count — this is the one card whose content shape genuinely varies. |
+| `now` | `now.svg.tpl` | Interests/Building columns + the active drink's AA (from `assets/AA/<panel.drink>.txt`, via `lib/drink.mjs`). Width fixed at 880px; height is measured the same way as `aboutme`. |
 | `md` | — | `panel.value` inserted as raw markdown at that position (breaks out of the centered image `<div>`). |
 | `mdfile` | — | contents of `panel.path` inserted verbatim. |
 
@@ -60,10 +60,33 @@ Unlike the main build, filenames are versioned per-drink from that drink
 file's own `AA-version:` field, not `README.yml`'s version — editing one
 drink doesn't churn every other drink's gallery image.
 
-Card size (`width`/`height`) is estimated from the AA's longest visible
-line and the caption length, since drinks vary a lot in art size (see
-`lib/drink.mjs`'s `visibleLength` — it accounts for `{...}`/`\{`/`\}`/`\\`
-markup not being 1:1 with rendered width).
+Card size (`width` *and* `height`, unlike `aboutme`/`now`) is real browser
+measurement via `lib/measure.mjs` — both dimensions genuinely vary here
+(no fixed grid width to align to), so both are freed and measured.
+
+## Dynamic sizing: measure, don't guess
+
+`aboutme`/`now`/`aa-card` all size themselves via `lib/measure.mjs`'s
+`measureTermSize()`, not character-width arithmetic:
+
+1. Render the card once with `.term`'s width and/or height set to a large
+   probe value (`PROBE_SIZE`).
+2. Force `.term { width/height: fit-content !important; overflow: visible !important; }`
+   (only for whichever dimension the caller frees — a panel with a grid-
+   aligned fixed width only frees height) and load that in a real headless
+   Chromium page.
+3. Read `.term`'s actual `getBoundingClientRect()` — the true rendered
+   size, whatever the font/line-height/padding turn out to be.
+4. Re-render the card for real at that exact size.
+
+`width: auto` on a block element fills its container instead of shrink-
+wrapping — `fit-content` is what actually measures natural size; this
+tripped up an earlier version of this code, worth remembering if you touch
+`measureTermSize()`. An earlier version of this file also used to explain
+character-width-ratio heuristics for sizing — those are gone; they were a
+constant source of magic-number bugs (e.g. underestimating a titlebar's
+width against the id text, so the id ran into the dots) that real
+measurement doesn't have.
 
 ## lib/
 
@@ -71,7 +94,8 @@ markup not being 1:1 with rendered width).
 |------|---------|
 | `yaml.mjs` | Parser for the `README.yml` subset (nested maps, block lists of maps — including this repo's `- id:` shorthand where the first key has no value and names the item — and inline flow arrays `[a, b, c]`). Not spec-compliant YAML; don't feed it anything fancier. |
 | `template.mjs` | `render(template, vars)` — single-pass `{{key}}` substitution, throws on an unknown placeholder. `escapeXhtml(s)` — `&`/`<`/`>` escaping for XHTML text content. |
-| `panel.mjs` | Cross-template building blocks: `renderTitlebar(title)` / `renderPromptbar(command)` (the exact markup every card's header/prompt line uses — never hand-write this markup in a template), plus `estimateTextWidth`/`estimateWrappedLines` for the dynamic-sizing heuristics in `build-readme.mjs`/`build-aa-gallery.mjs`. |
+| `panel.mjs` | Cross-template building blocks: `renderTitlebar(title)` / `renderPromptbar(command)` — the exact markup every card's header/prompt line uses. Never hand-write this markup in a template. |
+| `measure.mjs` | `measureTermSize(browser, probeSvg, { freeWidth, freeHeight })` — real-browser dynamic sizing, see above. |
 | `drink.mjs` | Parses `assets/AA/*.txt` (format documented in `assets/AA/AA.txt.tpl`) and renders a drink's AA + caption into the XHTML fragment + light/dark CSS custom-property values every drink-displaying template needs. Also implements the `{...}` accent-highlight / `\{` `\}` literal-brace / `\\` literal-backslash escaping. |
 
 See `assets/templates/README.md` for the template side of this pipeline

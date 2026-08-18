@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 395" width="880" height="395">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 378" width="880" height="378">
   <style>
     :root {
   --bg: #ffffff;
@@ -61,7 +61,7 @@
     @media (prefers-color-scheme: dark) {
       :root { --drink: #c68a52; --drink-accent: #d9b48f; }
     }
-    .term { width: 880px; height: 395px; }
+    .term { width: 880px; height: 378px; }
     .body { flex: 1 1 auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding: 12px 60px 22px 60px; }
     .columns { display: flex; width: 100%; gap: 60px; }
     .col { flex: 1 1 0; min-width: 0; }
