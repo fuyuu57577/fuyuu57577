@@ -116,10 +116,13 @@ async function main() {
 
 ${caption}
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./${dark}">
-  <img src="./${light}" alt="${id} ASCII art" />
-</picture>
+<table>
+<tr><th>Light</th><th>Dark</th></tr>
+<tr>
+<td><img src="./${light}" alt="${id} ASCII art (light)" /></td>
+<td><img src="./${dark}" alt="${id} ASCII art (dark)" /></td>
+</tr>
+</table>
 `,
     )
     .join("\n");
