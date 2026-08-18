@@ -2,8 +2,10 @@
 // Format (see assets/AA/AA.txt.tpl):
 //   AA-version: <version>
 //   caption: <text>
-//   color: <hex>
-//   accent: <hex>
+//   color: <hex>              dark-mode drink color
+//   accent: <hex>              dark-mode accent color
+//   light-color: <hex>        light-mode drink color
+//   light-accent: <hex>       light-mode accent color
 //   AA:
 //   <art lines, rendered verbatim; {...} = accent highlight, \{ \} = literal
 //    brace, \\ = a single literal backslash (regex-style escaping — a lone,
@@ -102,6 +104,8 @@ export function parseDrinkFile(text) {
   const caption = field("caption");
   const color = field("color");
   const accent = field("accent");
+  const lightColor = field("light-color");
+  const lightAccent = field("light-accent");
 
   const aaIdx = lines.findIndex((l) => l.trim() === "AA:");
   if (aaIdx === -1) throw new Error("drink file is missing an `AA:` line");
@@ -110,18 +114,31 @@ export function parseDrinkFile(text) {
   if (artEnd === -1) artEnd = lines.length;
   while (artEnd > artStart && lines[artEnd - 1].trim() === "") artEnd--;
 
-  return { aaVersion, caption, color, accent, artLines: lines.slice(artStart, artEnd) };
+  return {
+    aaVersion,
+    caption,
+    color,
+    accent,
+    lightColor,
+    lightAccent,
+    artLines: lines.slice(artStart, artEnd),
+  };
 }
 
-// Renders a parsed drink into the XHTML fragments + CSS custom-property
-// override shared by every template that displays a drink (now.svg.tpl,
-// the AA gallery cards).
-export function renderDrink({ caption, color, accent, artLines }) {
+// Renders a parsed drink into the XHTML fragment + light/dark CSS
+// custom-property values shared by every template that displays a drink
+// (now.svg.tpl, the AA gallery cards).
+export function renderDrink({ caption, color, accent, lightColor, lightAccent, artLines }) {
   const aaBody = artLines.map(escapeAaLine).join("\n");
   const aa = [
     `<xhtml:pre class="aa">${aaBody}</xhtml:pre>`,
     `<xhtml:div class="caption">${escapeXhtml(caption)}</xhtml:div>`,
   ].join("\n");
-  const drinkStyle = `--drink: ${color}; --drink-accent: ${accent};`;
-  return { aa, drinkStyle };
+  return {
+    aa,
+    drinkColorDark: color,
+    drinkAccentDark: accent,
+    drinkColorLight: lightColor,
+    drinkAccentLight: lightAccent,
+  };
 }

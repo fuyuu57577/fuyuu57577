@@ -109,7 +109,7 @@
           </xhtml:div>
         </xhtml:div>
         <xhtml:div class="divider"></xhtml:div>
-        <xhtml:div class="coffee-row" style="--drink: #8b5a2b; --drink-accent: #b98a5e;">
+        <xhtml:div class="coffee-row">
           <xhtml:p class="coffee-title">A drink to match my mood</xhtml:p>
           <xhtml:pre class="aa">     <xhtml:span class="accent">(</xhtml:span>
       <xhtml:span class="accent">)     (</xhtml:span>

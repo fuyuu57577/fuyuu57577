@@ -1,6 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 {{width}} {{height}}" width="{{width}}" height="{{height}}">
   <style>
     {{sharedStyles}}
+    :root { --drink: {{drinkColorLight}}; --drink-accent: {{drinkAccentLight}}; }
+    @media (prefers-color-scheme: dark) {
+      :root { --drink: {{drinkColorDark}}; --drink-accent: {{drinkAccentDark}}; }
+    }
     .term { width: {{width}}px; height: {{height}}px; }
     .promptbar { padding: 14px 40px 0 40px; }
     .body {
@@ -28,7 +32,7 @@
     <xhtml:div class="term">
       {{titlebar}}
       {{promptbar}}
-      <xhtml:div class="body" style="{{drinkStyle}}">
+      <xhtml:div class="body">
         {{aa}}
       </xhtml:div>
     </xhtml:div>

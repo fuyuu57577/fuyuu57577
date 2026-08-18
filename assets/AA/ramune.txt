@@ -1,8 +1,10 @@
-version: 0.2.0
-AA-version: 0.2.0
+version: 0.3.0
+AA-version: 0.3.0
 caption: Perfect for a hot day.
-color: #2f6fb0
-accent: #7ec8f5
+color: #5ea1e8
+accent: #a9dcff
+light-color: #2f6fb0
+light-accent: #7ec8f5
 AA:
       __
      |  |

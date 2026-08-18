@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 {{height}}" width="880" height="{{height}}">
   <style>
     {{sharedStyles}}
-    :root { --drink: #8b5a2b; --drink-accent: #b98a5e; }
+    :root { --drink: {{drinkColorLight}}; --drink-accent: {{drinkAccentLight}}; }
     @media (prefers-color-scheme: dark) {
-      :root { --drink: #c68a52; --drink-accent: #d9b48f; }
+      :root { --drink: {{drinkColorDark}}; --drink-accent: {{drinkAccentDark}}; }
     }
     .term { width: 880px; height: {{height}}px; }
     .body { flex: 1 1 auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding: 12px 60px 22px 60px; }
@@ -37,7 +37,7 @@
           {{columns}}
         </xhtml:div>
         <xhtml:div class="divider"></xhtml:div>
-        <xhtml:div class="coffee-row" style="{{drinkStyle}}">
+        <xhtml:div class="coffee-row">
           <xhtml:p class="coffee-title">A drink to match my mood</xhtml:p>
           {{aa}}
         </xhtml:div>

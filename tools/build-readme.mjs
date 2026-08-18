@@ -147,7 +147,7 @@ function renderNowPanel(panel, tplDir, drinksDir, sharedStyles) {
   const columns = [column("Interests", panel.interests), column("Building", panel.building)].join("\n");
 
   const drink = parseDrinkFile(readFileSync(path.join(drinksDir, `${panel.drink}.txt`), "utf8"));
-  const { aa, drinkStyle } = renderDrink(drink);
+  const { aa, drinkColorDark, drinkAccentDark, drinkColorLight, drinkAccentLight } = renderDrink(drink);
 
   const maxColumnItems = Math.max(panel.interests.length, panel.building.length);
   const height = heightForNow(maxColumnItems, drink.artLines.length);
@@ -158,7 +158,10 @@ function renderNowPanel(panel, tplDir, drinksDir, sharedStyles) {
     height: String(height),
     columns,
     aa,
-    drinkStyle,
+    drinkColorDark,
+    drinkAccentDark,
+    drinkColorLight,
+    drinkAccentLight,
   });
   return { svg };
 }

@@ -1,8 +1,10 @@
-version: 0.1.0
-AA-version: 0.2.0
+version: 0.3.0
+AA-version: 0.3.0
 caption: A change of pace
 color: #bfe6ff
 accent: #ffe9a8
+light-color: #2f6fb0
+light-accent: #c9971f
 AA:
       {\\\\\\}
        \\\\\\       {_----_}

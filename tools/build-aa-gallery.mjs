@@ -71,7 +71,7 @@ async function main() {
     for (const file of drinkFiles) {
       const id = file.replace(/\.txt$/, "");
       const drink = parseDrinkFile(readFileSync(path.join(drinksDir, file), "utf8"));
-      const { aa, drinkStyle } = renderDrink(drink);
+      const { aa, drinkColorDark, drinkAccentDark, drinkColorLight, drinkAccentLight } = renderDrink(drink);
       const { width, height } = sizeFor(drink.artLines, drink.caption);
       const svg = render(template, {
         sharedStyles,
@@ -80,7 +80,10 @@ async function main() {
         width: String(width),
         height: String(height),
         aa,
-        drinkStyle,
+        drinkColorDark,
+        drinkAccentDark,
+        drinkColorLight,
+        drinkAccentLight,
       });
       const svgPath = path.join(tmpDir, `${id}.svg`);
       writeFileSync(svgPath, svg, "utf8");
