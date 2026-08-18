@@ -1,4 +1,4 @@
-<!-- assets version: 2 (bump this when card SVGs change, so README.md content changes and GitHub re-renders the images) -->
+<!-- assets version: 3 (bump this when card SVGs change, so README.md content changes and GitHub re-renders the images) -->
 
 <div align="center">
 

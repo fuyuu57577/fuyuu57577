@@ -79,13 +79,11 @@
     .snowflake { font-size: 130px; line-height: 1; color: var(--snow); }
     .avatar { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border); box-shadow: 0 0 0 5px var(--panel); }
     .info { flex: 1; font-size: 14px; line-height: 1.85; min-width: 0; }
-    .promptbar { flex: 0 0 auto; box-sizing: border-box; padding: 16px 32px 0 32px; }
-    .prompt { font-size: 14px; white-space: nowrap; }
+    .promptbar { flex: 0 0 auto; box-sizing: border-box; padding: 14px 32px 0 32px; }
+    .prompt { font-size: 12px; white-space: nowrap; }
     .p-user { color: var(--prompt-user); font-weight: 700; }
-    .p-path { color: var(--accent); font-weight: 700; }
     .p-sym { color: var(--muted); margin: 0 2px; }
     .p-cmd { color: var(--text); font-weight: 700; }
-    .cursor { display: inline-block; width: 7px; height: 15px; background: var(--text); margin-left: 5px; vertical-align: -2px; opacity: 0.85; }
     .head { font-size: 17px; font-weight: 700; color: var(--text); }
     .rule { color: var(--border); margin: 4px 0 10px 0; letter-spacing: 1px; }
     .row { display: flex; }
@@ -104,7 +102,7 @@
         <xhtml:div class="titletext">fuyuu57577@github — aboutme</xhtml:div>
       </xhtml:div>
       <xhtml:div class="promptbar">
-        <xhtml:div class="prompt"><xhtml:span class="p-user">fuyuu57577@github</xhtml:span> <xhtml:span class="p-path">~</xhtml:span> <xhtml:span class="p-sym">$</xhtml:span> <xhtml:span class="p-cmd">aboutme</xhtml:span></xhtml:div>
+        <xhtml:div class="prompt"><xhtml:span class="p-user">fuyuu57577</xhtml:span><xhtml:span class="p-sym">@</xhtml:span><xhtml:span class="p-cmd">github</xhtml:span> <xhtml:span class="p-sym">$</xhtml:span> <xhtml:span class="p-cmd">aboutme</xhtml:span></xhtml:div>
       </xhtml:div>
       <xhtml:div class="body">
         <xhtml:div class="logo">
