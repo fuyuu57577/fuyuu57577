@@ -12,6 +12,7 @@ import { chromium } from "playwright";
 import { parseYaml } from "./lib/yaml.mjs";
 import { render } from "./lib/template.mjs";
 import { parseDrinkFile, renderDrink, visibleLength } from "./lib/drink.mjs";
+import { renderTitlebar, renderPromptbar } from "./lib/panel.mjs";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const rp = (...p) => path.join(root, ...p);
@@ -52,11 +53,13 @@ async function main() {
   const cfg = doc.Config;
 
   const templatesDir = rp(cfg.ImageTemplatesDir);
+  const tplDir = path.join(templatesDir, "images");
+  const sharedStyles = readFileSync(path.join(tplDir, "shared.css"), "utf8");
   const drinksDir = rp(cfg.DrinksPresetDir);
   const galleryDir = rp("assets/AA_Gallery");
   mkdirSync(galleryDir, { recursive: true });
 
-  const template = readFileSync(path.join(templatesDir, "aa-card.svg.tpl"), "utf8");
+  const template = readFileSync(path.join(tplDir, "aa-card.svg.tpl"), "utf8");
   const drinkFiles = readdirSync(drinksDir).filter((f) => f.endsWith(".txt"));
 
   const tmpDir = rp("assets/AA_Gallery/.tmp");
@@ -70,7 +73,15 @@ async function main() {
       const drink = parseDrinkFile(readFileSync(path.join(drinksDir, file), "utf8"));
       const { aa, drinkStyle } = renderDrink(drink);
       const { width, height } = sizeFor(drink.artLines, drink.caption);
-      const svg = render(template, { width: String(width), height: String(height), id, aa, drinkStyle });
+      const svg = render(template, {
+        sharedStyles,
+        titlebar: renderTitlebar(id),
+        promptbar: renderPromptbar(id),
+        width: String(width),
+        height: String(height),
+        aa,
+        drinkStyle,
+      });
       const svgPath = path.join(tmpDir, `${id}.svg`);
       writeFileSync(svgPath, svg, "utf8");
 

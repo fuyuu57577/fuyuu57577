@@ -1,38 +1,63 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 130" width="880" height="130">
   <style>
     :root {
-      --bg: #ffffff;
-      --border: #d0d7de;
-      --text: #24292f;
-      --muted: #57606a;
-      --accent: #0969da;
-      --prompt-user: #1a7f37;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0d1117;
-        --border: #30363d;
-        --text: #c9d1d9;
-        --muted: #8b949e;
-        --accent: #58a6ff;
-        --prompt-user: #3fb950;
-      }
-    }
-    .term {
-      position: relative;
-      box-sizing: border-box;
-      display: flex;
-      flex-direction: column;
-      width: 880px;
-      height: 130px;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
-      color: var(--text);
-    }
-    .promptbar { flex: 0 0 auto; box-sizing: border-box; padding: 14px 32px 0 32px; }
+  --bg: #ffffff;
+  --panel: #f6f8fa;
+  --border: #d0d7de;
+  --text: #24292f;
+  --muted: #57606a;
+  --accent: #0969da;
+  --accent2: #8250df;
+  --dot-red: #ff5f56;
+  --dot-yellow: #ffbd2e;
+  --dot-green: #27c93f;
+  --prompt-user: #1a7f37;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --accent: #58a6ff;
+    --accent2: #d2a8ff;
+    --prompt-user: #3fb950;
+  }
+}
+.term {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: ui-monospace, "Cascadia Code", "Consolas", "SFMono-Regular", Menlo, monospace;
+  color: var(--text);
+}
+.titlebar {
+  flex: 0 0 34px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--border);
+}
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot.r { background: var(--dot-red); }
+.dot.y { background: var(--dot-yellow); }
+.dot.g { background: var(--dot-green); }
+.titletext { margin: 0 auto; font-size: 12px; color: var(--muted); transform: translateX(-18px); }
+.promptbar { flex: 0 0 auto; box-sizing: border-box; padding: 14px 32px 0 32px; }
+.prompt { font-size: 12px; white-space: nowrap; }
+.p-user { color: var(--prompt-user); font-weight: 700; }
+.p-sym { color: var(--muted); margin: 0 2px; }
+.p-cmd { color: var(--text); font-weight: 700; }
+
+    .term { position: relative; width: 880px; height: 130px; }
     .body {
       flex: 1 1 auto;
       box-sizing: border-box;
@@ -43,10 +68,6 @@
     }
     .icon { flex: 0 0 auto; width: 44px; height: 44px; color: var(--text); }
     .info { min-width: 0; }
-    .prompt { font-size: 12px; white-space: nowrap; }
-    .p-user { color: var(--prompt-user); font-weight: 700; }
-    .p-sym { color: var(--muted); margin: 0 2px; }
-    .p-cmd { color: var(--text); font-weight: 700; }
     .handle { font-size: 19px; font-weight: 700; }
     .url { font-size: 12px; color: var(--accent); margin-top: 3px; }
     .goto {
