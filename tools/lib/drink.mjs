@@ -5,59 +5,88 @@
 //   color: <hex>
 //   accent: <hex>
 //   AA:
-//   <art lines, rendered verbatim; {...} = accent highlight, \{ \} = literal>
+//   <art lines, rendered verbatim; {...} = accent highlight, \{ \} = literal
+//    brace, \\ = a single literal backslash (regex-style escaping — a lone,
+//    unescaped \ is undefined behavior)>
 //
 //   Sketch:
 //   <ignored — scratch space for drafts>
 
 import { escapeXhtml } from "./template.mjs";
 
+// Windows/JP-locale Chromium renders literal U+005C as ¥ even with lang="en"
+// on an <img>-embedded SVG — this mirrored slash is what \\ renders as.
+const MIRROR_BACKSLASH = '<xhtml:span class="mirror">/</xhtml:span>';
+
 function escapeAaInline(text) {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    // Windows/JP-locale Chromium renders literal U+005C as ¥ even with
-    // lang="en" on an <img>-embedded SVG — mirror a slash instead.
-    .replace(/\\/g, '<xhtml:span class="mirror">/</xhtml:span>');
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// \\, \{, \} inside a plain-text run (used both outside and inside accent
+// spans — braces don't nest, but escapes still apply in either place).
+const ESCAPE_RE = /\\\\|\\\{|\\\}/g;
+function escapeAaSegment(text) {
+  let out = "";
+  let lastIndex = 0;
+  let m;
+  while ((m = ESCAPE_RE.exec(text))) {
+    out += escapeAaInline(text.slice(lastIndex, m.index));
+    out += m[0] === "\\\\" ? MIRROR_BACKSLASH : m[0] === "\\{" ? "{" : "}";
+    lastIndex = ESCAPE_RE.lastIndex;
+  }
+  out += escapeAaInline(text.slice(lastIndex));
+  return out;
 }
 
 // {...} spans anywhere in the line (not just the whole line) get wrapped in
-// an accent-colored <span>; any number per line, no nesting. \{ and \} are
-// literal braces. Single-pass tokenizer (no placeholder substitution).
+// an accent-colored <span>; any number per line, no nesting.
 function escapeAaLine(rawLine) {
-  const tokenRe = /\\\{|\\\}|\{([^{}]*)\}/g;
+  const tokenRe = /\\\\|\\\{|\\\}|\{([^{}]*)\}/g;
   let out = "";
   let lastIndex = 0;
   let m;
   while ((m = tokenRe.exec(rawLine))) {
-    out += escapeAaInline(rawLine.slice(lastIndex, m.index));
-    if (m[0] === "\\{") {
+    out += escapeAaSegment(rawLine.slice(lastIndex, m.index));
+    if (m[0] === "\\\\") {
+      out += MIRROR_BACKSLASH;
+    } else if (m[0] === "\\{") {
       out += "{";
     } else if (m[0] === "\\}") {
       out += "}";
     } else {
-      out += `<xhtml:span class="accent">${escapeAaInline(m[1])}</xhtml:span>`;
+      out += `<xhtml:span class="accent">${escapeAaSegment(m[1])}</xhtml:span>`;
     }
     lastIndex = tokenRe.lastIndex;
   }
-  out += escapeAaInline(rawLine.slice(lastIndex));
+  out += escapeAaSegment(rawLine.slice(lastIndex));
   return out;
 }
 
-// Visible character count for a raw art line (ignores {}/\{/\} markup,
+function visibleSegmentLength(text) {
+  let len = 0;
+  let lastIndex = 0;
+  let m;
+  const re = /\\\\|\\\{|\\\}/g;
+  while ((m = re.exec(text))) {
+    len += m.index - lastIndex + 1;
+    lastIndex = re.lastIndex;
+  }
+  return len + (text.length - lastIndex);
+}
+
+// Visible character count for a raw art line (ignores {}/\{/\}/\\ markup,
 // which render as 0 or 1 chars respectively) — used to size gallery cards.
 export function visibleLength(rawLine) {
-  const tokenRe = /\\\{|\\\}|\{([^{}]*)\}/g;
+  const tokenRe = /\\\\|\\\{|\\\}|\{([^{}]*)\}/g;
   let len = 0;
   let lastIndex = 0;
   let m;
   while ((m = tokenRe.exec(rawLine))) {
-    len += m.index - lastIndex;
-    len += m[0] === "\\{" || m[0] === "\\}" ? 1 : m[1].length;
+    len += visibleSegmentLength(rawLine.slice(lastIndex, m.index));
+    len += m[0] === "\\\\" || m[0] === "\\{" || m[0] === "\\}" ? 1 : visibleSegmentLength(m[1]);
     lastIndex = tokenRe.lastIndex;
   }
-  len += rawLine.length - lastIndex;
+  len += visibleSegmentLength(rawLine.slice(lastIndex));
   return len;
 }
 

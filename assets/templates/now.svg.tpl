@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 405" width="880" height="405">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 {{height}}" width="880" height="{{height}}">
   <style>
     :root {
       --bg: #ffffff;
@@ -29,7 +29,7 @@
       display: flex;
       flex-direction: column;
       width: 880px;
-      height: 405px;
+      height: {{height}}px;
       background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 12px;
@@ -62,7 +62,7 @@
     }
     .aa .accent { color: var(--drink-accent); }
     .aa .mirror { display: inline-block; transform: scaleX(-1); }
-    .caption { font-size: 14px; color: var(--muted); font-style: italic; }
+    .caption { font-size: 14px; color: var(--muted); font-style: italic; white-space: nowrap; }
     .coffee-title { align-self: flex-start; font-size: 14px; color: var(--accent); font-weight: 700; margin: 0; }
   </style>
   <foreignObject width="100%" height="100%">
