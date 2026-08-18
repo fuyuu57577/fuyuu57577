@@ -1,0 +1,7 @@
+{
+  "name": "fuyuu57577-profile",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build-readme.mjs"
+  }
+}

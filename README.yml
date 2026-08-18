@@ -1,0 +1,47 @@
+version: 0.4.0
+
+Config:
+  DrinksPresetDir: ./assets/AA
+  ImageTemplatesDir: ./assets/templates
+  OutputMDFile: README.md
+  OutputImagesDir: ./assets/images
+
+Panels:
+  - aboutme:
+    type: aboutme
+    profileImage: ./assets/profile.jpg
+    nickname: ふゆ
+    univ: 大阪電気通信大学
+    mission: 便利だと思えるものを作りたい！
+    languages: [Python, TypeScript, Kotlin]
+    frameworks: [React, React Native, Flutter, FastAPI, Spring]
+    tools: [Docker, Git, MongoDB, Android SDK]
+    certs:
+      - name: 基本情報技術者
+        date: "'25"
+      - name: ITパスポート
+        date: "'23"
+    socials: [GitHub, X]
+    contact: fuyuu575@gmail.com
+
+  - portfolio-headerless:
+    type: badge
+    command: jump2portfolio
+    handle: Portfolio
+    url: fuyuu575.com
+    icon: globe
+    href: https://fuyuu575.com
+
+  - x-headerless:
+    type: badge
+    command: jump2x
+    handle: "@fuyuu575"
+    url: x.com/fuyuu575
+    icon: x
+    href: https://x.com/fuyuu575
+
+  - now:
+    type: now
+    interests: [Artificial Life, AI, Architecture]
+    building: [Portfolio, Pond]
+    drink: ramune

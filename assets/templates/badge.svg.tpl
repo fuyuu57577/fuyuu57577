@@ -41,8 +41,7 @@
       gap: 22px;
       padding: 0 32px;
     }
-    .xmark { flex: 0 0 auto; width: 44px; height: 44px; }
-    .xmark path { fill: var(--text); }
+    .icon { flex: 0 0 auto; width: 44px; height: 44px; color: var(--text); }
     .info { min-width: 0; }
     .prompt { font-size: 12px; white-space: nowrap; }
     .p-user { color: var(--prompt-user); font-weight: 700; }
@@ -64,13 +63,13 @@
   <foreignObject width="100%" height="100%">
     <xhtml:div class="term">
       <xhtml:div class="promptbar">
-        <xhtml:div class="prompt"><xhtml:span class="p-user">fuyuu57577</xhtml:span><xhtml:span class="p-sym">@</xhtml:span><xhtml:span class="p-cmd">github</xhtml:span> <xhtml:span class="p-sym">$</xhtml:span> <xhtml:span class="p-cmd">jump2x</xhtml:span></xhtml:div>
+        <xhtml:div class="prompt"><xhtml:span class="p-user">fuyuu57577</xhtml:span><xhtml:span class="p-sym">@</xhtml:span><xhtml:span class="p-cmd">github</xhtml:span> <xhtml:span class="p-sym">$</xhtml:span> <xhtml:span class="p-cmd">{{command}}</xhtml:span></xhtml:div>
       </xhtml:div>
       <xhtml:div class="body">
-        <svg class="xmark" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        {{icon}}
         <xhtml:div class="info">
-          <xhtml:div class="handle">@fuyuu575</xhtml:div>
-          <xhtml:div class="url">x.com/fuyuu575</xhtml:div>
+          <xhtml:div class="handle">{{handle}}</xhtml:div>
+          <xhtml:div class="url">{{url}}</xhtml:div>
         </xhtml:div>
       </xhtml:div>
       <svg class="goto" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

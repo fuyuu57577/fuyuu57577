@@ -1,5 +1,16 @@
 caption: Coffee is my go-to work companion.
+color: #8b5a2b
+accent: #b98a5e
+AA:
+     {(}
+      {)     (}
+       {)   )}
+      _______
+     |       |\
+     |       |/
+      `-----'
 
+Sketch:
      (
       )     (
        )   )

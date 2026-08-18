@@ -8,8 +8,8 @@
       --accent: #0969da;
       --accent2: #8250df;
       --prompt-user: #1a7f37;
-      --coffee: #8b5a2b;
-      --steam: #b98a5e;
+      --drink: #8b5a2b;
+      --drink-accent: #b98a5e;
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -20,8 +20,8 @@
         --accent: #58a6ff;
         --accent2: #d2a8ff;
         --prompt-user: #3fb950;
-        --coffee: #c68a52;
-        --steam: #d9b48f;
+        --drink: #c68a52;
+        --drink-accent: #d9b48f;
       }
     }
     .term {
@@ -57,10 +57,10 @@
       margin: 0;
       font-size: 13px;
       line-height: 1.28;
-      color: var(--coffee);
+      color: var(--drink);
       white-space: pre;
     }
-    .aa .steam { color: var(--steam); }
+    .aa .accent { color: var(--drink-accent); }
     .aa .mirror { display: inline-block; transform: scaleX(-1); }
     .caption { font-size: 14px; color: var(--muted); font-style: italic; }
     .coffee-title { align-self: flex-start; font-size: 14px; color: var(--accent); font-weight: 700; margin: 0; }
@@ -72,7 +72,7 @@
       </xhtml:div>
       <xhtml:div class="body">
         <xhtml:div class="columns">
-          <xhtml:div class="col">
+                    <xhtml:div class="col">
             <xhtml:p class="col-title">Interests</xhtml:p>
             <xhtml:ul>
               <xhtml:li><xhtml:span class="bullet">-</xhtml:span><xhtml:b>Artificial Life</xhtml:b></xhtml:li>
@@ -89,16 +89,18 @@
           </xhtml:div>
         </xhtml:div>
         <xhtml:div class="divider"></xhtml:div>
-        <xhtml:div class="coffee-row">
+        <xhtml:div class="coffee-row" style="--drink: #2f6fb0; --drink-accent: #7ec8f5;">
           <xhtml:p class="coffee-title">A drink to match my mood</xhtml:p>
-          <xhtml:pre class="aa">     <xhtml:span class="steam">(</xhtml:span>
-      <xhtml:span class="steam">)     (</xhtml:span>
-       <xhtml:span class="steam">)   )</xhtml:span>
-      _______
-     |       |<xhtml:span class="mirror">/</xhtml:span>
-     |       |/
-      `-----'</xhtml:pre>
-          <xhtml:div class="caption">Coffee is my go-to work companion.</xhtml:div>
+          <xhtml:pre class="aa">      __
+     |  |
+    /    <xhtml:span class="mirror">/</xhtml:span>
+    <xhtml:span class="mirror">/</xhtml:span> <xhtml:span class="accent">◯</xhtml:span> /
+    /~~~~<xhtml:span class="mirror">/</xhtml:span>
+  　|   <xhtml:span class="accent">o</xhtml:span> |
+  　| <xhtml:span class="accent">゜。</xhtml:span>|
+  　|<xhtml:span class="accent">。  .</xhtml:span>|
+  　`-___-'</xhtml:pre>
+                    <xhtml:div class="caption">Perfect for a hot day.</xhtml:div>
         </xhtml:div>
       </xhtml:div>
     </xhtml:div>

@@ -41,8 +41,7 @@
       gap: 22px;
       padding: 0 32px;
     }
-    .globe { flex: 0 0 auto; width: 44px; height: 44px; color: var(--text); }
-    .globe circle, .globe line, .globe path { stroke: currentColor; }
+    .icon { flex: 0 0 auto; width: 44px; height: 44px; color: var(--text); }
     .info { min-width: 0; }
     .prompt { font-size: 12px; white-space: nowrap; }
     .p-user { color: var(--prompt-user); font-weight: 700; }
@@ -67,11 +66,11 @@
         <xhtml:div class="prompt"><xhtml:span class="p-user">fuyuu57577</xhtml:span><xhtml:span class="p-sym">@</xhtml:span><xhtml:span class="p-cmd">github</xhtml:span> <xhtml:span class="p-sym">$</xhtml:span> <xhtml:span class="p-cmd">jump2portfolio</xhtml:span></xhtml:div>
       </xhtml:div>
       <xhtml:div class="body">
-        <svg class="globe" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="2" y1="12" x2="22" y2="12"/>
-          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-        </svg>
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10"/>
+  <line x1="2" y1="12" x2="22" y2="12"/>
+  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+</svg>
         <xhtml:div class="info">
           <xhtml:div class="handle">Portfolio</xhtml:div>
           <xhtml:div class="url">fuyuu575.com</xhtml:div>
