@@ -4,12 +4,13 @@
 //
 // Usage: node tools/build-readme.mjs
 
-import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, readdirSync, unlinkSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { createHash } from "node:crypto";
 import { parseYaml, idAndRest } from "./lib/yaml.mjs";
 import { render, escapeXhtml } from "./lib/template.mjs";
+import { parseDrinkFile, renderDrink } from "./lib/drink.mjs";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const rp = (...p) => path.join(root, ...p);
@@ -64,75 +65,6 @@ function renderBadgePanel(panel, templatesDir) {
   return { svg: render(template, { command: panel.command, handle: panel.handle, url: panel.url, icon }) };
 }
 
-function escapeAaInline(text) {
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    // Windows/JP-locale Chromium renders literal U+005C as ¥ even with
-    // lang="en" on an <img>-embedded SVG — mirror a slash instead.
-    .replace(/\\/g, '<xhtml:span class="mirror">/</xhtml:span>');
-}
-
-const BRACE_OPEN = "";
-const BRACE_CLOSE = "";
-
-// \{ and \} are literal braces (protected from accent-wrap detection below).
-function protectEscapedBraces(line) {
-  return line.replace(/\\\{/g, BRACE_OPEN).replace(/\\\}/g, BRACE_CLOSE);
-}
-function restoreEscapedBraces(text) {
-  return text.replaceAll(BRACE_OPEN, "{").replaceAll(BRACE_CLOSE, "}");
-}
-
-// {...} spans anywhere in the line (not just the whole line) get wrapped in
-// an accent-colored <span>; any number per line, no nesting.
-function escapeAaLine(rawLine) {
-  const line = protectEscapedBraces(rawLine);
-  const spanRe = /\{([^{}]*)\}/g;
-  let out = "";
-  let lastIndex = 0;
-  let m;
-  while ((m = spanRe.exec(line))) {
-    out += escapeAaInline(line.slice(lastIndex, m.index));
-    out += `<xhtml:span class="accent">${escapeAaInline(m[1])}</xhtml:span>`;
-    lastIndex = spanRe.lastIndex;
-  }
-  out += escapeAaInline(line.slice(lastIndex));
-  return restoreEscapedBraces(out);
-}
-
-// Format (see assets/AA/AA.txt.tpl):
-//   caption: <text>
-//   color: <hex>
-//   accent: <hex>
-//   AA:
-//   <art lines, rendered verbatim; {...} = accent highlight, \{ \} = literal>
-//
-//   Sketch:
-//   <ignored — scratch space for drafts>
-function parseDrinkFile(text) {
-  const lines = text.split(/\r?\n/);
-
-  const field = (name) => {
-    const line = lines.find((l) => l.startsWith(`${name}:`));
-    if (!line) throw new Error(`drink file is missing a \`${name}:\` line`);
-    return line.slice(name.length + 1).trim();
-  };
-  const caption = field("caption");
-  const color = field("color");
-  const accent = field("accent");
-
-  const aaIdx = lines.findIndex((l) => l.trim() === "AA:");
-  if (aaIdx === -1) throw new Error("drink file is missing an `AA:` line");
-  let artStart = aaIdx + 1;
-  let artEnd = lines.findIndex((l, i) => i > aaIdx && l.trim() === "Sketch:");
-  if (artEnd === -1) artEnd = lines.length;
-  while (artEnd > artStart && lines[artEnd - 1].trim() === "") artEnd--;
-
-  return { caption, color, accent, artLines: lines.slice(artStart, artEnd) };
-}
-
 function renderNowPanel(panel, templatesDir, drinksDir) {
   const template = readFileSync(path.join(templatesDir, "now.svg.tpl"), "utf8");
 
@@ -151,15 +83,8 @@ function renderNowPanel(panel, templatesDir, drinksDir) {
   };
   const columns = [column("Interests", panel.interests), column("Building", panel.building)].join("\n");
 
-  const { caption, color, accent, artLines } = parseDrinkFile(
-    readFileSync(path.join(drinksDir, `${panel.drink}.txt`), "utf8"),
-  );
-  const aaBody = artLines.map(escapeAaLine).join("\n");
-  const aa = [
-    `<xhtml:pre class="aa">${aaBody}</xhtml:pre>`,
-    `          <xhtml:div class="caption">${escapeXhtml(caption)}</xhtml:div>`,
-  ].join("\n          ");
-  const drinkStyle = `--drink: ${color}; --drink-accent: ${accent};`;
+  const drink = parseDrinkFile(readFileSync(path.join(drinksDir, `${panel.drink}.txt`), "utf8"));
+  const { aa, drinkStyle } = renderDrink(drink);
 
   return { svg: render(template, { columns, aa, drinkStyle }) };
 }
@@ -170,6 +95,7 @@ function main() {
   const yamlText = readFileSync(rp("README.yml"), "utf8");
   const doc = parseYaml(yamlText);
   const cfg = doc.Config;
+  if (!doc.version) throw new Error("README.yml is missing a top-level `version:` field");
 
   const templatesDir = rp(cfg.ImageTemplatesDir);
   const drinksDir = rp(cfg.DrinksPresetDir);
@@ -195,7 +121,14 @@ function main() {
           ? renderNowPanel(panel, templatesDir, drinksDir)
           : renderer[panel.type](panel, templatesDir);
 
-      const fileName = `${id}.svg`;
+      // Version the filename itself (not just a comment) so the <img> src
+      // actually changes and GitHub's camo proxy can't serve a stale cache.
+      const fileName = `${id}-${doc.version}.svg`;
+      for (const stale of readdirSync(imagesDir)) {
+        if (stale.startsWith(`${id}-`) && stale.endsWith(".svg") && stale !== fileName) {
+          unlinkSync(path.join(imagesDir, stale));
+        }
+      }
       writeFileSync(path.join(imagesDir, fileName), svg, "utf8");
       const relSrc = "./" + path.posix.join(cfg.OutputImagesDir.replace(/^\.\//, ""), fileName);
       const alt = `fuyuu57577 ${id} panel`;
@@ -219,7 +152,6 @@ function main() {
   }
   flushImages();
 
-  if (!doc.version) throw new Error("README.yml is missing a top-level `version:` field");
   const hash = createHash("sha256").update(yamlText).digest("hex").slice(0, 12);
   const md = [
     `<!-- generated by tools/build-readme.mjs from README.yml — do not edit by hand -->`,

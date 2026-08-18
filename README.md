@@ -3,10 +3,10 @@
 
 <div align="center">
 
-<a id="card-aboutme" href="#card-aboutme"><img src="./assets/images/aboutme.svg" alt="fuyuu57577 aboutme panel" width="880" /></a>
-<a href="https://fuyuu575.com"><img src="./assets/images/portfolio-headerless.svg" alt="fuyuu57577 portfolio-headerless panel" width="880" /></a>
-<a href="https://x.com/fuyuu575"><img src="./assets/images/x-headerless.svg" alt="fuyuu57577 x-headerless panel" width="880" /></a>
-<a id="card-now" href="#card-now"><img src="./assets/images/now.svg" alt="fuyuu57577 now panel" width="880" /></a>
+<a id="card-aboutme" href="#card-aboutme"><img src="./assets/images/aboutme-0.4.1.svg" alt="fuyuu57577 aboutme panel" width="880" /></a>
+<a href="https://fuyuu575.com"><img src="./assets/images/portfolio-headerless-0.4.1.svg" alt="fuyuu57577 portfolio-headerless panel" width="880" /></a>
+<a href="https://x.com/fuyuu575"><img src="./assets/images/x-headerless-0.4.1.svg" alt="fuyuu57577 x-headerless panel" width="880" /></a>
+<a id="card-now" href="#card-now"><img src="./assets/images/now-0.4.1.svg" alt="fuyuu57577 now panel" width="880" /></a>
 
 </div>
 

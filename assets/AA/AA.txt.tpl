@@ -1,3 +1,5 @@
+version: 0.1.0 // this docs version
+AA-version: 0.0.0 // ASCII art version
 caption: // This sentence is displayed below the ASCII art.
 color: // Please enter the color code in hex format.
 accent: // Please enter the accent color code in hex format.

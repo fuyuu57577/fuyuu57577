@@ -2,6 +2,9 @@
   "name": "fuyuu57577-profile",
   "private": true,
   "scripts": {
-    "build": "node tools/build-readme.mjs"
+    "build": "node tools/build-readme.mjs && node tools/build-aa-gallery.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.62.1"
   }
 }
