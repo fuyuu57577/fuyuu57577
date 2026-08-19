@@ -14,6 +14,18 @@ Coffee is my go-to work companion.
 </tr>
 </table>
 
+### hojicha
+
+Take a breather
+
+<table>
+<tr><th>Light</th><th>Dark</th></tr>
+<tr>
+<td><img src="./hojicha-light-0.1.0.png" alt="hojicha ASCII art (light)" /></td>
+<td><img src="./hojicha-dark-0.1.0.png" alt="hojicha ASCII art (dark)" /></td>
+</tr>
+</table>
+
 ### ice-lemonade
 
 A change of pace

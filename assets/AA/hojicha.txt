@@ -1,0 +1,29 @@
+version: 0.4.0 
+AA-version: 0.1.0 
+Copyright: Copyright (c) 2026 fuyuu575 <fuyuu575@gmail.com> 
+caption: Take a breather
+color: #f5eee1
+accent: #b97a3f
+light-color: #a89877
+light-accent: #7a4f22
+AA:
+        @    @@
+       @      @
+       _@______@_
+      /{～ー～ー～}\\_
+     |\\----------/|_)
+  　 /\\___________/\\
+     \\_____________/
+
+
+Sketch:
+
+        @    @@
+       @      @
+       _@______@_
+      / ～ー～ー～ー \
+     |\----------/|)
+  　 /\___________/\
+     \_____________/
+
+     Copyright (c) 2026 fuyuu575 <fuyuu575@gmail.com>
