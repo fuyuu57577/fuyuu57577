@@ -1,5 +1,6 @@
-version: 0.3.0
-AA-version: 0.3.0
+version: 0.4.0
+AA-version: 0.3.1
+Copyright: Copyright (c) 2026 ふゆ <fuyuu575@gmail.com>
 caption: Coffee is my go-to work companion.
 color: #c68a52
 accent: #d9b48f
@@ -22,3 +23,4 @@ Sketch:
      |       |\
      |       |/
       `-----'
+     Copyright (c) 2026 fuyuu575 <fuyuu575@gmail.com>

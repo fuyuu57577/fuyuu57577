@@ -1,6 +1,7 @@
 // Shared parsing/rendering for assets/AA/*.txt drink files.
 // Format (see assets/AA/AA.txt.tpl):
 //   AA-version: <version>
+//   Copyright: <notice>        embedded verbatim into output SVG/PNG metadata
 //   caption: <text>
 //   color: <hex>              dark-mode drink color
 //   accent: <hex>              dark-mode accent color
@@ -101,6 +102,7 @@ export function parseDrinkFile(text) {
     return line.slice(name.length + 1).trim();
   };
   const aaVersion = field("AA-version");
+  const copyright = field("Copyright");
   const caption = field("caption");
   const color = field("color");
   const accent = field("accent");
@@ -116,6 +118,7 @@ export function parseDrinkFile(text) {
 
   return {
     aaVersion,
+    copyright,
     caption,
     color,
     accent,

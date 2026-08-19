@@ -1,5 +1,6 @@
-version: 0.3.0 // this docs version
+version: 0.4.0 // this docs version
 AA-version: 0.0.0 // ASCII art version
+Copyright: Copyright (c) {year} {author} <{email}> // Copyright of AA. use in protect to AA and generated images.
 caption: // This sentence is displayed below the ASCII art.
 color: // Please enter the color code in hex format.
 accent: // Please enter the accent color code in hex format.
@@ -26,3 +27,5 @@ Sketch:
      |       |\
      |       |/
       `-----'
+      
+     Copyright (c) {year} {author} <{email}>

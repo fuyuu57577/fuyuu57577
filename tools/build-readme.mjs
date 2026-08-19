@@ -121,6 +121,7 @@ async function renderNowPanel(browser, panel, tplDir, drinksDir, sharedStyles) {
     drinkAccentDark,
     drinkColorLight,
     drinkAccentLight,
+    copyright: escapeXhtml(drink.copyright),
   });
   return { svg };
 }

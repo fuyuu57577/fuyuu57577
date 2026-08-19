@@ -60,6 +60,13 @@ Unlike the main build, filenames are versioned per-drink from that drink
 file's own `AA-version:` field, not `README.yml`'s version — editing one
 drink doesn't churn every other drink's gallery image.
 
+Each drink file's `Copyright:` field is embedded into the output files
+themselves, not just the source `.txt` — an `<metadata>` element in the SVG,
+and an `iTXt` chunk (`lib/png-metadata.mjs`) in the PNG — so the notice
+survives a file being saved/shared detached from its README/gallery
+context. This applies to every image that renders AA art: the gallery cards
+here, and the `now` panel in `build-readme.mjs`.
+
 Card size (`width` *and* `height`, unlike `aboutme`/`now`) is real browser
 measurement via `lib/measure.mjs` — both dimensions genuinely vary here
 (no fixed grid width to align to), so both are freed and measured.

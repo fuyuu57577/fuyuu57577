@@ -10,10 +10,11 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import { chromium } from "playwright";
 import { parseYaml } from "./lib/yaml.mjs";
-import { render } from "./lib/template.mjs";
+import { render, escapeXhtml } from "./lib/template.mjs";
 import { parseDrinkFile, renderDrink } from "./lib/drink.mjs";
 import { renderTitlebar, renderPromptbar } from "./lib/panel.mjs";
 import { measureTermSize, PROBE_SIZE } from "./lib/measure.mjs";
+import { addPngCopyright } from "./lib/png-metadata.mjs";
 
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const rp = (...p) => path.join(root, ...p);
@@ -63,6 +64,7 @@ async function main() {
         drinkAccentDark,
         drinkColorLight,
         drinkAccentLight,
+        copyright: escapeXhtml(drink.copyright),
       };
 
       // Pass 1: render at a generous probe size and measure the card's real
@@ -87,7 +89,9 @@ async function main() {
       for (const scheme of ["light", "dark"]) {
         const fileName = `${id}-${scheme}-${drink.aaVersion}.png`;
         names[scheme] = fileName;
-        await screenshot(browser, svgPath, width, height, scheme, path.join(galleryDir, fileName));
+        const outPath = path.join(galleryDir, fileName);
+        await screenshot(browser, svgPath, width, height, scheme, outPath);
+        writeFileSync(outPath, addPngCopyright(readFileSync(outPath), drink.copyright));
         console.log(`compiled drink "${id}" (${scheme}) -> assets/AA_Gallery/${fileName}`);
       }
       entries.push({ id, caption: drink.caption, light: names.light, dark: names.dark });

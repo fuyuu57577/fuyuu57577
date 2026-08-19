@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 {{height}}" width="880" height="{{height}}">
+  <metadata>{{copyright}}</metadata>
   <style>
     {{sharedStyles}}
     :root { --drink: {{drinkColorLight}}; --drink-accent: {{drinkAccentLight}}; }
