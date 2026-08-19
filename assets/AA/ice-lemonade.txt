@@ -1,5 +1,5 @@
 version: 0.4.0
-AA-version: 0.3.1
+AA-version: 0.3.2
 Copyright: Copyright (c) 2026 ふゆ <fuyuu575@gmail.com>
 caption: A change of pace
 color: #bfe6ff
@@ -31,4 +31,4 @@ Sketch:
      |  ～ | ー✭ー||
      \_     \ /| _//
        """""""""""
-     Copyright (c) 2026 ふゆ <fuyuu575@gmail.com>
+     Copyright (c) 2026 fuyuu575 <fuyuu575@gmail.com>
