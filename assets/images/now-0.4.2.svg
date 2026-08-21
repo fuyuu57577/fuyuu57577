@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 378" width="880" height="378">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 411" width="880" height="411">
   <metadata>Copyright (c) 2026 ふゆ &lt;fuyuu575@gmail.com&gt;</metadata>
   <style>
     :root {
@@ -58,11 +58,11 @@
 .p-sym { color: var(--muted); margin: 0 2px; }
 .p-cmd { color: var(--text); font-weight: 700; }
 
-    :root { --drink: #8b5a2b; --drink-accent: #b98a5e; }
+    :root { --drink: #2f6fb0; --drink-accent: #7ec8f5; }
     @media (prefers-color-scheme: dark) {
-      :root { --drink: #c68a52; --drink-accent: #d9b48f; }
+      :root { --drink: #5ea1e8; --drink-accent: #a9dcff; }
     }
-    .term { width: 880px; height: 378px; }
+    .term { width: 880px; height: 411px; }
     .body { flex: 1 1 auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding: 12px 60px 22px 60px; }
     .columns { display: flex; width: 100%; gap: 60px; }
     .col { flex: 1 1 0; min-width: 0; }
@@ -112,14 +112,16 @@
         <xhtml:div class="divider"></xhtml:div>
         <xhtml:div class="coffee-row">
           <xhtml:p class="coffee-title">A drink to match my mood</xhtml:p>
-          <xhtml:pre class="aa">     <xhtml:span class="accent">(</xhtml:span>
-      <xhtml:span class="accent">)     (</xhtml:span>
-       <xhtml:span class="accent">)   )</xhtml:span>
-      _______
-     |       |<xhtml:span class="mirror">/</xhtml:span>
-     |       |/
-      `-----'</xhtml:pre>
-<xhtml:div class="caption">Coffee is my go-to work companion.</xhtml:div>
+          <xhtml:pre class="aa">      __
+     |  |
+    /    <xhtml:span class="mirror">/</xhtml:span>
+    <xhtml:span class="mirror">/</xhtml:span> <xhtml:span class="accent">◯</xhtml:span> /
+    /~~~~<xhtml:span class="mirror">/</xhtml:span>
+  　|   <xhtml:span class="accent">o</xhtml:span> |
+  　| <xhtml:span class="accent">゜。</xhtml:span>|
+  　|<xhtml:span class="accent">。  .</xhtml:span>|
+  　`-___-'</xhtml:pre>
+<xhtml:div class="caption">Perfect for a hot day.</xhtml:div>
         </xhtml:div>
       </xhtml:div>
     </xhtml:div>
