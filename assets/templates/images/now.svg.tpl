@@ -29,6 +29,7 @@
     .aa .mirror { display: inline-block; transform: scaleX(-1); }
     .caption { font-size: 14px; color: var(--muted); font-style: italic; white-space: nowrap; }
     .coffee-title { align-self: flex-start; font-size: 14px; color: var(--accent); font-weight: 700; margin: 0; }
+    .coffee-title .drink-name { color: var(--muted); font-weight: 400; }
   </style>
   <foreignObject width="100%" height="100%">
     <xhtml:div class="term">
@@ -39,7 +40,7 @@
         </xhtml:div>
         <xhtml:div class="divider"></xhtml:div>
         <xhtml:div class="coffee-row">
-          <xhtml:p class="coffee-title">A drink to match my mood</xhtml:p>
+          <xhtml:p class="coffee-title">A drink to match my mood <xhtml:span class="drink-name">・{{drinkName}}</xhtml:span></xhtml:p>
           {{aa}}
         </xhtml:div>
       </xhtml:div>
