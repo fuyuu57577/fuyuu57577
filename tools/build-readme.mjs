@@ -34,15 +34,23 @@ Here are some ideas to get you started:
 -->
 `;
 
-// ---------- panel renderers: each returns { svg } ----------
+// ---------- panel renderers: each returns { svg, mobileSvg } ----------
 
-// aboutme/now have a width fixed at 880px by design (aligns with the other
-// panels in the README grid) but a height that depends on content (a long
-// row can wrap, a drink's AA can run long) — so only height is measured.
-async function renderWithMeasuredHeight(browser, template, vars) {
-  const probeSvg = render(template, { ...vars, height: String(PROBE_SIZE) });
+// aboutme/now/badge render twice: once at DESKTOP_WIDTH (aligns with the
+// other panels in the README grid) and once at MOBILE_WIDTH with a stacked
+// layout (`.term.mobile` overrides in the template's own CSS — see
+// assets/templates/README.md). The two files are swapped via a <picture>
+// element at MOBILE_BREAKPOINT, so no in-SVG media query is needed. Height
+// always depends on content and is measured per-variant, since the stacked
+// mobile layout is a different height than desktop.
+const DESKTOP_WIDTH = 880;
+const MOBILE_WIDTH = 400;
+const MOBILE_BREAKPOINT = 600;
+
+async function renderWithMeasuredHeight(browser, template, vars, width) {
+  const probeSvg = render(template, { ...vars, width: String(width), height: String(PROBE_SIZE) });
   const { height } = await measureTermSize(browser, probeSvg, { freeWidth: false });
-  return render(template, { ...vars, height: String(height) });
+  return render(template, { ...vars, width: String(width), height: String(height) });
 }
 
 async function renderAboutmePanel(browser, panel, tplDir, sharedStyles) {
@@ -68,27 +76,32 @@ async function renderAboutmePanel(browser, panel, tplDir, sharedStyles) {
     row("Contact", escapeXhtml(panel.contact)),
   ].join("\n");
 
-  const svg = await renderWithMeasuredHeight(browser, template, {
+  const baseVars = {
     sharedStyles,
     titlebar: renderTitlebar("aboutme"),
     promptbar: renderPromptbar("aboutme"),
     avatar: `data:image/jpeg;base64,${avatarB64}`,
     rows,
-  });
-  return { svg };
+  };
+  const svg = await renderWithMeasuredHeight(browser, template, { ...baseVars, termClass: "term" }, DESKTOP_WIDTH);
+  const mobileSvg = await renderWithMeasuredHeight(browser, template, { ...baseVars, termClass: "term mobile" }, MOBILE_WIDTH);
+  return { svg, mobileSvg };
 }
 
 function renderBadgePanel(panel, tplDir, sharedStyles) {
   const template = readFileSync(path.join(tplDir, "badge.svg.tpl"), "utf8");
   const icon = readFileSync(path.join(tplDir, "..", "icons", `${panel.icon}.svg`), "utf8").trim();
-  const svg = render(template, {
+  const baseVars = {
     sharedStyles,
     promptbar: renderPromptbar(panel.command),
     handle: panel.handle,
     url: panel.url,
     icon,
-  });
-  return { svg };
+    height: "130",
+  };
+  const svg = render(template, { ...baseVars, termClass: "term", width: String(DESKTOP_WIDTH) });
+  const mobileSvg = render(template, { ...baseVars, termClass: "term mobile", width: String(MOBILE_WIDTH) });
+  return { svg, mobileSvg };
 }
 
 async function renderNowPanel(browser, panel, tplDir, drinksDir, sharedStyles) {
@@ -112,7 +125,7 @@ async function renderNowPanel(browser, panel, tplDir, drinksDir, sharedStyles) {
   const drink = parseDrinkFile(readFileSync(path.join(drinksDir, `${panel.drink}.txt`), "utf8"));
   const { aa, drinkColorDark, drinkAccentDark, drinkColorLight, drinkAccentLight } = renderDrink(drink);
 
-  const svg = await renderWithMeasuredHeight(browser, template, {
+  const baseVars = {
     sharedStyles,
     promptbar: renderPromptbar("now"),
     columns,
@@ -123,8 +136,10 @@ async function renderNowPanel(browser, panel, tplDir, drinksDir, sharedStyles) {
     drinkAccentLight,
     copyright: escapeXhtml(drink.copyright),
     drinkName: escapeXhtml(panel.drink),
-  });
-  return { svg };
+  };
+  const svg = await renderWithMeasuredHeight(browser, template, { ...baseVars, termClass: "term" }, DESKTOP_WIDTH);
+  const mobileSvg = await renderWithMeasuredHeight(browser, template, { ...baseVars, termClass: "term mobile" }, MOBILE_WIDTH);
+  return { svg, mobileSvg };
 }
 
 // ---------- main ----------
@@ -157,32 +172,46 @@ async function main() {
       const { id, panel } = idAndRest(item);
 
       if (panel.type === "aboutme" || panel.type === "badge" || panel.type === "now") {
-        const { svg } =
+        const { svg, mobileSvg } =
           panel.type === "aboutme"
             ? await renderAboutmePanel(browser, panel, tplDir, sharedStyles)
             : panel.type === "badge"
               ? renderBadgePanel(panel, tplDir, sharedStyles)
               : await renderNowPanel(browser, panel, tplDir, drinksDir, sharedStyles);
 
-        // Version the filename itself (not just a comment) so the <img> src
-        // actually changes and GitHub's camo proxy can't serve a stale cache.
+        // Version the filenames themselves (not just a comment) so the
+        // <img>/<source> src actually changes and GitHub's camo proxy can't
+        // serve a stale cache. Two files per panel: a desktop layout and a
+        // narrower, stacked mobile layout, swapped via <picture> below.
         const fileName = `${id}-${doc.version}.svg`;
+        const mobileFileName = `${id}-mobile-${doc.version}.svg`;
         for (const stale of readdirSync(imagesDir)) {
-          if (stale.startsWith(`${id}-`) && stale.endsWith(".svg") && stale !== fileName) {
+          if (stale.startsWith(`${id}-`) && stale.endsWith(".svg") && stale !== fileName && stale !== mobileFileName) {
             unlinkSync(path.join(imagesDir, stale));
           }
         }
         writeFileSync(path.join(imagesDir, fileName), svg, "utf8");
+        writeFileSync(path.join(imagesDir, mobileFileName), mobileSvg, "utf8");
         const relSrc = "./" + path.posix.join(cfg.OutputImagesDir.replace(/^\.\//, ""), fileName);
+        const relMobileSrc = "./" + path.posix.join(cfg.OutputImagesDir.replace(/^\.\//, ""), mobileFileName);
         const alt = `fuyuu57577 ${id} panel`;
 
-        const imgTag = `<img src="${relSrc}" alt="${escapeXhtml(alt)}" width="880" />`;
+        // No width attribute: each variant's own intrinsic SVG width (plus
+        // GitHub's `max-width: 100%` on markdown images) is what sizes it —
+        // forcing width="880" here would stretch the narrower mobile source
+        // back up to desktop size and defeat the whole swap.
+        const imgTag = [
+          `<picture>`,
+          `  <source media="(max-width: ${MOBILE_BREAKPOINT}px)" srcset="${relMobileSrc}">`,
+          `  <img src="${relSrc}" alt="${escapeXhtml(alt)}" />`,
+          `</picture>`,
+        ].join("\n");
         const anchored =
           panel.type === "badge"
             ? `<a href="${panel.href}">${imgTag}</a>`
             : `<a id="card-${id}" href="#card-${id}">${imgTag}</a>`;
         pendingImages.push(anchored);
-        console.log(`compiled panel "${id}" (${panel.type}) -> ${relSrc}`);
+        console.log(`compiled panel "${id}" (${panel.type}) -> ${relSrc} (+ mobile variant)`);
       } else if (panel.type === "md") {
         flushImages();
         bodyParts.push(panel.value);

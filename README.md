@@ -3,10 +3,22 @@
 
 <div align="center">
 
-<a id="card-aboutme" href="#card-aboutme"><img src="./assets/images/aboutme-0.4.3.svg" alt="fuyuu57577 aboutme panel" width="880" /></a>
-<a href="https://fuyuu575.com"><img src="./assets/images/portfolio-headerless-0.4.3.svg" alt="fuyuu57577 portfolio-headerless panel" width="880" /></a>
-<a href="https://x.com/fuyuu575"><img src="./assets/images/x-headerless-0.4.3.svg" alt="fuyuu57577 x-headerless panel" width="880" /></a>
-<a id="card-now" href="#card-now"><img src="./assets/images/now-0.4.3.svg" alt="fuyuu57577 now panel" width="880" /></a>
+<a id="card-aboutme" href="#card-aboutme"><picture>
+  <source media="(max-width: 600px)" srcset="./assets/images/aboutme-mobile-0.4.3.svg">
+  <img src="./assets/images/aboutme-0.4.3.svg" alt="fuyuu57577 aboutme panel" />
+</picture></a>
+<a href="https://fuyuu575.com"><picture>
+  <source media="(max-width: 600px)" srcset="./assets/images/portfolio-headerless-mobile-0.4.3.svg">
+  <img src="./assets/images/portfolio-headerless-0.4.3.svg" alt="fuyuu57577 portfolio-headerless panel" />
+</picture></a>
+<a href="https://x.com/fuyuu575"><picture>
+  <source media="(max-width: 600px)" srcset="./assets/images/x-headerless-mobile-0.4.3.svg">
+  <img src="./assets/images/x-headerless-0.4.3.svg" alt="fuyuu57577 x-headerless panel" />
+</picture></a>
+<a id="card-now" href="#card-now"><picture>
+  <source media="(max-width: 600px)" srcset="./assets/images/now-mobile-0.4.3.svg">
+  <img src="./assets/images/now-0.4.3.svg" alt="fuyuu57577 now panel" />
+</picture></a>
 
 </div>
 

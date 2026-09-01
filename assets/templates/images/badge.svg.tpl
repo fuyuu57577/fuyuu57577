@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 130" width="880" height="130">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 {{width}} {{height}}" width="{{width}}" height="{{height}}">
   <style>
     {{sharedStyles}}
-    .term { position: relative; width: 880px; height: 130px; }
+    .term { position: relative; width: {{width}}px; height: {{height}}px; }
     .body {
       flex: 1 1 auto;
       box-sizing: border-box;
@@ -10,9 +10,12 @@
       gap: 22px;
       padding: 0 32px;
     }
+    .term.mobile .body { gap: 16px; padding: 0 20px; }
     .icon { flex: 0 0 auto; width: 44px; height: 44px; color: var(--text); }
+    .term.mobile .icon { width: 36px; height: 36px; }
     .info { min-width: 0; }
     .handle { font-size: 19px; font-weight: 700; }
+    .term.mobile .handle { font-size: 17px; }
     .url { font-size: 12px; color: var(--accent); margin-top: 3px; }
     .goto {
       position: absolute;
@@ -23,10 +26,11 @@
       color: var(--muted);
       opacity: 0.75;
     }
+    .term.mobile .goto { right: 12px; bottom: 10px; width: 16px; height: 16px; }
     .goto path, .goto polyline, .goto line { stroke: currentColor; }
   </style>
   <foreignObject width="100%" height="100%">
-    <xhtml:div class="term">
+    <xhtml:div class="{{termClass}}">
       {{promptbar}}
       <xhtml:div class="body">
         {{icon}}
