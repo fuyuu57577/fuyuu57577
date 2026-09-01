@@ -245,12 +245,14 @@ async function main() {
         // GitHub's `max-width: 100%` on markdown images) is what sizes it —
         // forcing width="880" here would stretch the narrower mobile source
         // back up to desktop size and defeat the whole swap.
-        const imgTag = [
-          `<picture>`,
-          `  <source media="(max-width: ${MOBILE_BREAKPOINT}px)" srcset="${relMobileSrc}">`,
-          `  <img src="${relSrc}" alt="${escapeXhtml(alt)}" />`,
-          `</picture>`,
-        ].join("\n");
+        // Single line, deliberately: a <source ...> line is a CommonMark
+        // HTML-block-starting tag, so on a line of its own it can interrupt
+        // an open paragraph mid-block — this corrupted exactly the first
+        // <picture> in the README (the rest got swept into one big raw HTML
+        // block as an accidental side effect and looked fine). Keeping the
+        // whole element on one line sidesteps CommonMark's block parser
+        // entirely; it's parsed as inline HTML, which nests correctly.
+        const imgTag = `<picture><source media="(max-width: ${MOBILE_BREAKPOINT}px)" srcset="${relMobileSrc}"><img src="${relSrc}" alt="${escapeXhtml(alt)}" /></picture>`;
         const anchored =
           panel.type === "badge"
             ? `<a href="${panel.href}">${imgTag}</a>`
