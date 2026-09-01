@@ -51,16 +51,19 @@
     .term.mobile .rows-desktop { display: none; }
     .term.mobile .rows-mobile { display: flex; flex-direction: column; gap: 10px; }
     .chip-row { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+    /* shadcn Badge (secondary variant): solid muted fill, no border, pill
+       radius, semibold label — not an outlined tag. */
     .chip {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 3px 8px;
-      border: 1px solid var(--border);
+      padding: 3px 9px;
+      border: none;
       border-radius: 999px;
-      background: var(--panel);
+      background: var(--border);
       color: var(--text);
       font-size: 11px;
+      font-weight: 600;
       line-height: 1.4;
     }
     .chip-icon { width: 12px; height: 12px; flex: 0 0 auto; }

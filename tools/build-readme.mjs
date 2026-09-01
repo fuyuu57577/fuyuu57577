@@ -117,7 +117,7 @@ async function renderAboutmePanel(browser, panel, tplDir, sharedStyles) {
     row("Mission", escapeXhtml(panel.mission)),
     row("Tech", `<xhtml:span class="chip-row">${techChips}</xhtml:span>`),
     row("Certs", certsHtml),
-    row("Contact", `<xhtml:span class="chip-row">${contactChips}</xhtml:span>`),
+    row("Social", `<xhtml:span class="chip-row">${contactChips}</xhtml:span>`),
   ].join("\n");
 
   const baseVars = {
