@@ -42,6 +42,28 @@
     .palette { flex: 0 0 auto; box-sizing: border-box; display: flex; padding: 0 32px 22px 32px; gap: 6px; }
     .term.mobile .palette { padding: 0 20px 16px 20px; flex-wrap: wrap; }
     .sw { width: 34px; height: 14px; border-radius: 3px; }
+    /* Desktop shows label:value rows (.rows-desktop); mobile swaps in
+       .rows-mobile, which groups Languages/Frameworks/Tools into one "Tech"
+       chip row and Socials+Contact into one "Contact" chip row instead of
+       repeating them as separate rows — a real layout change, not just the
+       desktop rows shrunk down. */
+    .rows-mobile { display: none; }
+    .term.mobile .rows-desktop { display: none; }
+    .term.mobile .rows-mobile { display: flex; flex-direction: column; gap: 10px; }
+    .chip-row { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+    .chip-icon { width: 12px; height: 12px; flex: 0 0 auto; }
   </style>
   <foreignObject width="100%" height="100%">
     <xhtml:div class="{{termClass}}">
@@ -54,7 +76,8 @@
         <xhtml:div class="info">
           <xhtml:div class="head">fuyuu57577@github</xhtml:div>
           <xhtml:div class="rule">-------------------------------</xhtml:div>
-          {{rows}}
+          <xhtml:div class="rows-desktop">{{rows}}</xhtml:div>
+          <xhtml:div class="rows-mobile">{{mobileRows}}</xhtml:div>
         </xhtml:div>
       </xhtml:div>
       <xhtml:div class="palette">

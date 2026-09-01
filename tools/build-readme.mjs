@@ -18,6 +18,34 @@ import { measureTermSize, PROBE_SIZE } from "./lib/measure.mjs";
 const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const rp = (...p) => path.join(root, ...p);
 
+// Icon slug (assets/templates/icons/<slug>.svg) for each chip label the
+// mobile aboutme layout might show. A label with no entry here still
+// renders fine — just as a text-only chip, no icon.
+const CHIP_ICON_SLUG = {
+  Python: "python",
+  TypeScript: "typescript",
+  Kotlin: "kotlin",
+  React: "react",
+  "React Native": "react",
+  Flutter: "flutter",
+  FastAPI: "fastapi",
+  Spring: "spring",
+  Docker: "docker",
+  Git: "git",
+  MongoDB: "mongodb",
+  "Android SDK": "android",
+  GitHub: "github",
+  X: "x",
+};
+
+function chip(iconsDir, label, slug = CHIP_ICON_SLUG[label]) {
+  let icon = "";
+  if (slug) {
+    icon = readFileSync(path.join(iconsDir, `${slug}.svg`), "utf8").trim().replace('class="icon"', 'class="chip-icon"');
+  }
+  return `<xhtml:span class="chip">${icon}<xhtml:span>${escapeXhtml(label)}</xhtml:span></xhtml:span>`;
+}
+
 const FOOTER = `<!--
 **fuyuu57577/fuyuu57577** is a ✨ _special_ ✨ repository because its \`README.md\` (this file) appears on your GitHub profile.
 
@@ -56,6 +84,7 @@ async function renderWithMeasuredHeight(browser, template, vars, width) {
 async function renderAboutmePanel(browser, panel, tplDir, sharedStyles) {
   const template = readFileSync(path.join(tplDir, "aboutme.svg.tpl"), "utf8");
   const avatarB64 = readFileSync(rp(panel.profileImage)).toString("base64");
+  const iconsDir = path.join(tplDir, "..", "icons");
 
   const row = (label, valueHtml) =>
     `          <xhtml:div class="row"><xhtml:div class="label">${escapeXhtml(label)}</xhtml:div><xhtml:div class="value">${valueHtml}</xhtml:div></xhtml:div>`;
@@ -76,12 +105,28 @@ async function renderAboutmePanel(browser, panel, tplDir, sharedStyles) {
     row("Contact", escapeXhtml(panel.contact)),
   ].join("\n");
 
+  // Mobile groups Languages+Frameworks+Tools into one "Tech" chip row, and
+  // Socials+Contact into one "Contact" chip row, instead of repeating each
+  // as its own label:value row — see the .rows-mobile note in the template.
+  const techChips = [...panel.languages, ...panel.frameworks, ...panel.tools].map((t) => chip(iconsDir, t)).join("");
+  const contactChips = [...panel.socials.map((s) => chip(iconsDir, s)), chip(iconsDir, panel.contact, "mail")].join("");
+
+  const mobileRows = [
+    row("Nickname", escapeXhtml(panel.nickname)),
+    row("Univ", escapeXhtml(panel.univ)),
+    row("Mission", escapeXhtml(panel.mission)),
+    row("Tech", `<xhtml:span class="chip-row">${techChips}</xhtml:span>`),
+    row("Certs", certsHtml),
+    row("Contact", `<xhtml:span class="chip-row">${contactChips}</xhtml:span>`),
+  ].join("\n");
+
   const baseVars = {
     sharedStyles,
     titlebar: renderTitlebar("aboutme"),
     promptbar: renderPromptbar("aboutme"),
     avatar: `data:image/jpeg;base64,${avatarB64}`,
     rows,
+    mobileRows,
   };
   const svg = await renderWithMeasuredHeight(browser, template, { ...baseVars, termClass: "term" }, DESKTOP_WIDTH);
   const mobileSvg = await renderWithMeasuredHeight(browser, template, { ...baseVars, termClass: "term mobile" }, MOBILE_WIDTH);

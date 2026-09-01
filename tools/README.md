@@ -49,6 +49,18 @@ panel template" in `assets/templates/README.md` if you add a template that
 needs this too. Height is measured per variant since the stacked mobile
 layout is a different height than desktop.
 
+`aboutme`'s mobile variant goes further: instead of repeating
+Languages/Frameworks/Tools as three separate rows and Socials/Contact as
+two more, it groups them into two icon-chip rows ("Tech", "Contact") via
+`CHIP_ICON_SLUG` + `chip()` in `build-readme.mjs`. Chip icons under
+`assets/templates/icons/` (`python.svg`, `react.svg`, `docker.svg`, etc.)
+are simple-icons brand marks (CC0), normalized to `fill="currentColor"` so
+they pick up the theme's text color like `globe.svg`/`x.svg` already did —
+`mail.svg` is hand-drawn in the same stroke style as `globe.svg` since
+there's no generic (non-brand) mail mark in simple-icons. A chip label
+with no entry in `CHIP_ICON_SLUG` still renders fine, just without an
+icon.
+
 `--preview`: renders normally, but keeps whatever version/config-hash
 comment line is already in `README.md` instead of writing a fresh one —
 useful for iterating on a panel without bumping the public cache-busting
