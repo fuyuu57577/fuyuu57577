@@ -77,7 +77,7 @@
           <xhtml:img class="avatar" src="{{avatar}}" />
         </xhtml:div>
         <xhtml:div class="info">
-          <xhtml:div class="head">fuyuu57577@github</xhtml:div>
+          <xhtml:div class="head">fuyuu575@github</xhtml:div>
           <xhtml:div class="rule">-------------------------------</xhtml:div>
           <xhtml:div class="rows-desktop">{{rows}}</xhtml:div>
           <xhtml:div class="rows-mobile">{{mobileRows}}</xhtml:div>
