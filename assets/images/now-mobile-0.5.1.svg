@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 880 411" width="880" height="411">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xhtml="http://www.w3.org/1999/xhtml" viewBox="0 0 400 486" width="400" height="486">
   <metadata>Copyright (c) 2026 ふゆ &lt;fuyuu575@gmail.com&gt;</metadata>
   <style>
     :root {
@@ -62,9 +62,11 @@
     @media (prefers-color-scheme: dark) {
       :root { --drink: #5ea1e8; --drink-accent: #a9dcff; }
     }
-    .term { width: 880px; height: 411px; }
+    .term { width: 400px; height: 486px; }
     .body { flex: 1 1 auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: center; gap: 20px; padding: 12px 60px 22px 60px; }
+    .term.mobile .body { padding: 12px 22px 18px 22px; gap: 14px; }
     .columns { display: flex; width: 100%; gap: 60px; }
+    .term.mobile .columns { flex-direction: column; gap: 14px; }
     .col { flex: 1 1 0; min-width: 0; }
     .col-title { font-size: 14px; color: var(--accent); font-weight: 700; margin: 0 0 8px 0; }
     .col ul { list-style: none; margin: 0; padding: 0; font-size: 14px; line-height: 1.9; }
@@ -88,7 +90,7 @@
     .coffee-title .drink-name { color: var(--muted); font-weight: 400; }
   </style>
   <foreignObject width="100%" height="100%">
-    <xhtml:div class="term">
+    <xhtml:div class="term mobile">
       <xhtml:div class="promptbar">
         <xhtml:div class="prompt"><xhtml:span class="p-user">fuyuu57577</xhtml:span><xhtml:span class="p-sym">@</xhtml:span><xhtml:span class="p-cmd">github</xhtml:span> <xhtml:span class="p-sym">$</xhtml:span> <xhtml:span class="p-cmd">now</xhtml:span></xhtml:div>
       </xhtml:div>

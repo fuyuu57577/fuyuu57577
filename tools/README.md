@@ -37,6 +37,30 @@ Image filenames are versioned (`<id>-<README.yml version>.svg`), not just
 commented, so GitHub's camo proxy can't serve a stale cache for an
 unchanged URL. Old versions for the same id are deleted on each build.
 
+`aboutme`/`badge`/`now` each render **twice** — once at `DESKTOP_WIDTH`
+(880px) and once at `MOBILE_WIDTH` (400px, filename suffixed
+`-mobile-<version>`) — and are wired together with a `<picture>` /
+`<source media="(max-width: 600px)">` so the browser (not the SVG) picks
+the right one for the viewport. The mobile variant isn't the desktop layout
+shrunk down; its template has `.term.mobile ...` CSS overrides (stacked
+rows/columns, smaller avatar/icon, no titlebar centering-slack assumption)
+that change the actual layout, not just the scale — see "Adding a new
+panel template" in `assets/templates/README.md` if you add a template that
+needs this too. Height is measured per variant since the stacked mobile
+layout is a different height than desktop.
+
+`aboutme`'s mobile variant goes further: instead of repeating
+Languages/Frameworks/Tools as three separate rows and Socials/Contact as
+two more, it groups them into two icon-chip rows ("Tech", "Contact") via
+`CHIP_ICON_SLUG` + `chip()` in `build-readme.mjs`. Chip icons under
+`assets/templates/icons/` (`python.svg`, `react.svg`, `docker.svg`, etc.)
+are simple-icons brand marks (CC0), normalized to `fill="currentColor"` so
+they pick up the theme's text color like `globe.svg`/`x.svg` already did —
+`mail.svg` is hand-drawn in the same stroke style as `globe.svg` since
+there's no generic (non-brand) mail mark in simple-icons. A chip label
+with no entry in `CHIP_ICON_SLUG` still renders fine, just without an
+icon.
+
 `--preview`: renders normally, but keeps whatever version/config-hash
 comment line is already in `README.md` instead of writing a fresh one —
 useful for iterating on a panel without bumping the public cache-busting

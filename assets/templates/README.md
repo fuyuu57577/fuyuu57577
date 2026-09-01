@@ -68,3 +68,15 @@ template — copy the placeholder pattern above instead.
    `assets/templates/images/*.svg.tpl` files aren't previewable on their
    own; render them via the build first (see repo root `README.yml` /
    `tools/*.mjs` docstrings for the exact commands).
+6. If the panel is shown directly in the main README (as opposed to a
+   gallery-only card), give it a mobile layout too: parameterize `width`
+   (don't hardcode 880), take a `{{termClass}}` var for the outer
+   `<xhtml:div class="{{termClass}}">` (`"term"` or `"term mobile"`), and
+   add `.term.mobile ...` CSS overrides for a narrow, stacked layout —
+   don't just let the desktop layout shrink, phone-width text gets
+   unreadably small that way. If the panel has a titlebar, also override
+   `.titletext { margin: 0; transform: none; }` under `.term.mobile` — its
+   default centering trick assumes desktop-width slack (see the note in
+   `aa-card.svg.tpl`). `tools/build-readme.mjs` renders both variants and
+   wires them together with `<picture>`/`<source media>` — see
+   `tools/README.md`.
