@@ -47,7 +47,7 @@ function chip(iconsDir, label, slug = CHIP_ICON_SLUG[label]) {
 }
 
 const FOOTER = `<!--
-**fuyuu57577/fuyuu57577** is a ✨ _special_ ✨ repository because its \`README.md\` (this file) appears on your GitHub profile.
+**fuyuu575/fuyuu575** is a ✨ _special_ ✨ repository because its \`README.md\` (this file) appears on your GitHub profile.
 
 Here are some ideas to get you started:
 
@@ -239,7 +239,7 @@ async function main() {
         writeFileSync(path.join(imagesDir, mobileFileName), mobileSvg, "utf8");
         const relSrc = "./" + path.posix.join(cfg.OutputImagesDir.replace(/^\.\//, ""), fileName);
         const relMobileSrc = "./" + path.posix.join(cfg.OutputImagesDir.replace(/^\.\//, ""), mobileFileName);
-        const alt = `fuyuu57577 ${id} panel`;
+        const alt = `fuyuu575 ${id} panel`;
 
         // No width attribute: each variant's own intrinsic SVG width (plus
         // GitHub's `max-width: 100%` on markdown images) is what sizes it —

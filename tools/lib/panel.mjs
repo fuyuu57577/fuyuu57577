@@ -13,7 +13,7 @@ export function renderTitlebar(title) {
     `  <xhtml:div class="dot r"></xhtml:div>`,
     `  <xhtml:div class="dot y"></xhtml:div>`,
     `  <xhtml:div class="dot g"></xhtml:div>`,
-    `  <xhtml:div class="titletext">fuyuu57577@github — ${escapeXhtml(title)}</xhtml:div>`,
+    `  <xhtml:div class="titletext">fuyuu575@github — ${escapeXhtml(title)}</xhtml:div>`,
     `</xhtml:div>`,
   ].join("\n      ");
 }
@@ -21,7 +21,7 @@ export function renderTitlebar(title) {
 export function renderPromptbar(command) {
   return [
     `<xhtml:div class="promptbar">`,
-    `  <xhtml:div class="prompt"><xhtml:span class="p-user">fuyuu57577</xhtml:span><xhtml:span class="p-sym">@</xhtml:span><xhtml:span class="p-cmd">github</xhtml:span> <xhtml:span class="p-sym">$</xhtml:span> <xhtml:span class="p-cmd">${escapeXhtml(command)}</xhtml:span></xhtml:div>`,
+    `  <xhtml:div class="prompt"><xhtml:span class="p-user">fuyuu575</xhtml:span><xhtml:span class="p-sym">@</xhtml:span><xhtml:span class="p-cmd">github</xhtml:span> <xhtml:span class="p-sym">$</xhtml:span> <xhtml:span class="p-cmd">${escapeXhtml(command)}</xhtml:span></xhtml:div>`,
     `</xhtml:div>`,
   ].join("\n      ");
 }
